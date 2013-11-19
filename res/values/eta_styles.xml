@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+   
+    <color name="etaBlue">#1d6e8b</color>
+    <color name="etaBeige">#edefec</color>
+    <color name="etaGrey">#b8b8b8</color>
+    <color name="etaDarkGrey">#818181</color>
+    <color name="etaWhite">#ffffff</color>
+    
+    
+</resources>
