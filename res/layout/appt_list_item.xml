@@ -25,8 +25,6 @@
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="8"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
         android:orientation="vertical"
         android:weightSum="10" >
 
@@ -36,8 +34,6 @@
             android:layout_height="0dp"
             android:layout_weight="4"
             android:background="@color/etaGrey"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
             android:paddingTop="10dp"
@@ -69,8 +65,6 @@
             android:layout_height="0dp"
             android:layout_weight="6"
             android:background="@color/etaDarkGrey"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
             android:orientation="horizontal"
             android:paddingBottom="20dp"
             android:paddingTop="20dp"

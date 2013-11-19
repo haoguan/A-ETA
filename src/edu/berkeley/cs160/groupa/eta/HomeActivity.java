@@ -1,5 +1,6 @@
 package edu.berkeley.cs160.groupa.eta;
 
+import edu.berkeley.cs160.groupa.eta.adapter.ApptCursorAdapter;
 import edu.berkeley.cs160.groupa.eta.model.ApptContentProvider;
 import edu.berkeley.cs160.groupa.eta.model.ETASQLiteHelper;
 import edu.berkeley.cs160.groupa.eta.model.ETASQLiteHelper.ApptColumns;
@@ -23,12 +24,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-public class HomeActivity extends Activity implements OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class HomeActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	private static HomeActivity instance;
 	private SQLiteDatabase mDb;
 	ListView mApptList;
-	SimpleCursorAdapter mApptAdapter;
+	ApptCursorAdapter mApptAdapter;
 	
 	//ui elements
 	Button bAddJob;
@@ -46,23 +47,23 @@ public class HomeActivity extends Activity implements OnItemClickListener, Loade
 		bAddJob = (Button) findViewById(R.id.b_add_new_job);
 		mApptList = (ListView) findViewById(R.id.lv_appts);
 		
-		deleteTestData();
+//		deleteTestData();
 //		createTestData();
 
 		// just need to set up appointments in list.
 		String[] from = new String[] { ApptColumns.NAME, ApptColumns.FROM };
 		int[] to = new int[] { R.id.tv_appt_list_name, R.id.tv_list_time };
 		getLoaderManager().initLoader(1, null, this);
-		mApptAdapter = new SimpleCursorAdapter(this, R.layout.appt_list_item, null, from, to, 0);
+		mApptAdapter = new ApptCursorAdapter(this, null);
 		if (mApptList != null) {
 			mApptList.setAdapter(mApptAdapter);
 		}
-		mApptList.setOnItemClickListener(this);
 		
 		bAddJob.setOnClickListener(new OnClickListener(){
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(View v)
+			{
 				// start add job activity.
 				Intent intent = new Intent(v.getContext(), AddJobActivity.class);
 				startActivity(intent);
@@ -98,22 +99,6 @@ public class HomeActivity extends Activity implements OnItemClickListener, Loade
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		mApptAdapter.swapCursor(null);
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> adapter, View v, int pos, long id) {
-		// TODO Auto-generated method stub
-		
-		Log.d("ITEMCLICK", "YES");
-		if (v.getId() == R.id.ll_list_name) {
-			Log.d("NAMEITEMCLICK", "YES");
-		}
-		else if (v.getId() == R.id.ll_list_travel) {
-			Log.d("TRAVELITEMCLICK", "YES");
-			Intent i = new Intent(this, DirectionsActivity.class);
-			startActivity(i);
-		}
-		
 	}
 
 	public void deleteTestData() {

@@ -15,7 +15,7 @@
         android:weightSum="10" >
 
         <Button
-            android:id="@+id/b_add_job_cancel"
+            android:id="@+id/b_directions_home"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -24,15 +24,15 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="25dp"
             android:layout_weight="3"
-            android:background="@drawable/cancel_button"
+            android:background="@drawable/home"
             android:gravity="center" />
 
         <TextView
-            android:id="@+id/tv_location"
+            android:id="@+id/tv_directions_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="4"
+            android:layout_weight="5"
             android:gravity="center"
             android:text="Directions"
             android:textColor="@color/etaWhite"
@@ -40,16 +40,16 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/b_add_job_continue"
+            android:id="@+id/b_directions_late"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="25dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="25dp"
-            android:layout_weight="3"
-            android:background="@drawable/continue_button"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="2"
+            android:background="@drawable/directions_late"
             android:gravity="center" />
     </LinearLayout>
 
@@ -61,7 +61,7 @@
         android:orientation="horizontal" >
 
         <AutoCompleteTextView
-            android:id="@+id/actv_location_search"
+            android:id="@+id/actv_directions_destination"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="center"
@@ -69,9 +69,11 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/tv_location_bg"
+            android:background="@drawable/location_bg"
             android:hint="Destination..."
-            android:paddingLeft="40dp" />
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:paddingLeft="60dp" />
     </LinearLayout>
 
     <fragment
@@ -84,7 +86,7 @@
         android:background="@color/etaBeige" />
     
     <TextView 
-        android:id="@+id/tv_directions"
+        android:id="@+id/tv_directions_step"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -93,6 +95,9 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:text="1. Head South on LeRoyAve"
         />
 
 </LinearLayout>
