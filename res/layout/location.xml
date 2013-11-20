@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
-    android:background="@color/etaBeige" >
+    android:background="@color/etaBeige"
+    android:focusableInTouchMode="true" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -49,7 +50,7 @@
             android:layout_marginTop="25dp"
             android:layout_marginBottom="25dp"
             android:layout_weight="3"
-            android:background="@drawable/select"
+            android:background="@drawable/continue_button"
             android:gravity="center" />
     </LinearLayout>
     
@@ -69,9 +70,10 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:paddingLeft="60dp"
-            android:background="@drawable/location_bg"
+            android:paddingLeft="40dp"
+            android:background="@drawable/tv_location_bg"
             android:hint="Address"
+            android:singleLine="true"
             />
         
     </LinearLayout>

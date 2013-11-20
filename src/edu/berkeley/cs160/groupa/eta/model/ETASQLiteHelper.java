@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 public class ETASQLiteHelper extends SQLiteOpenHelper {
 	
 	public static final String DATABASE_NAME = "eta";
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 5;
 
 	public static final String APPT_TABLE = "appt";
 	
@@ -23,7 +23,6 @@ public class ETASQLiteHelper extends SQLiteOpenHelper {
 		public static final String FROM = "timeFrom"; //don't use from and to! Those are like sql key words!
 		public static final String TO = "timeTo";
 		public static final String LOCATION = "location";
-		public static final String NOTES = "notes";
 	}
 	
 	private static final String create_appt_table = "CREATE TABLE " + APPT_TABLE + " (	"
@@ -33,8 +32,7 @@ public class ETASQLiteHelper extends SQLiteOpenHelper {
 																	+ ApptColumns.DATE + " text not null, "
 																	+ ApptColumns.FROM + " text not null, "
 																	+ ApptColumns.TO + " text not null, "
-																	+ ApptColumns.LOCATION + " text not null, "
-																	+ ApptColumns.NOTES + " text not null"
+																	+ ApptColumns.LOCATION + " text not null"
 																	+ "); ";
 	
 	
@@ -59,7 +57,6 @@ public class ETASQLiteHelper extends SQLiteOpenHelper {
 	// Method is called during an upgrade of the db.
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL("DROP TABLE appt");
 		db.execSQL(create_appt_table);
 	}
 

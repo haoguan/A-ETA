@@ -1,23 +1,20 @@
 package edu.berkeley.cs160.groupa.eta.fragment;
 
-import java.util.Calendar;
-
-import edu.berkeley.cs160.groupa.eta.AddJobActivity;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.TimePickerDialog;
-import android.os.Bundle;
-
-public class TimePickerFragment extends DialogFragment {
+public static class TimePickerFragment extends DialogFragment{
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// Use the current date as the default date in the picker
 		final Calendar c = Calendar.getInstance();
-		int hour = c.get(Calendar.HOUR);
-		int minute = c.get(Calendar.MINUTE);
+		int year = c.get(Calendar.YEAR);
+		int month = c.get(Calendar.MONTH);
+		int day = c.get(Calendar.DAY_OF_MONTH);
 
 		// Create a new instance of DatePickerDialog and return it
-		return new TimePickerDialog(getActivity(), (AddJobActivity)getActivity(), hour, minute, false);
+		return new DatePickerDialog(getActivity(), this, year, month, day);
+	}
+
+	public void onDateSet(DatePicker view, int year, int month, int day) {
+		// Do something with the date chosen by the user
 	}
 }
