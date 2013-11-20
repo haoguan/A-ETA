@@ -6,6 +6,5 @@
     <color name="etaGrey">#b8b8b8</color>
     <color name="etaDarkGrey">#818181</color>
     <color name="etaWhite">#ffffff</color>
-    
-    
+    <color name="etaDialogBlue">#50a5bb</color>
 </resources>
