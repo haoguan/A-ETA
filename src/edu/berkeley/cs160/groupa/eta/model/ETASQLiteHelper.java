@@ -7,57 +7,60 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 public class ETASQLiteHelper extends SQLiteOpenHelper {
-	
-	public static final String DATABASE_NAME = "eta";
-	private static final int DATABASE_VERSION = 5;
+        
+        public static final String DATABASE_NAME = "eta";
+        private static final int DATABASE_VERSION = 6;
 
-	public static final String APPT_TABLE = "appt";
-	
-	private static ETASQLiteHelper instance;
-	
-	
-	public interface ApptColumns extends BaseColumns {
-		public static final String NAME = "name";
-		public static final String PHONE = "phone";
-		public static final String DATE = "date";
-		public static final String FROM = "timeFrom"; //don't use from and to! Those are like sql key words!
-		public static final String TO = "timeTo";
-		public static final String LOCATION = "location";
-	}
-	
-	private static final String create_appt_table = "CREATE TABLE " + APPT_TABLE + " (	"
-																	+ ApptColumns._ID + " integer primary key autoincrement, "
-																	+ ApptColumns.NAME + " text not null, "
-																	+ ApptColumns.PHONE + " text not null, " 
-																	+ ApptColumns.DATE + " text not null, "
-																	+ ApptColumns.FROM + " text not null, "
-																	+ ApptColumns.TO + " text not null, "
-																	+ ApptColumns.LOCATION + " text not null"
-																	+ "); ";
-	
-	
-	public ETASQLiteHelper(Context context) {
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-	}
-	
-	//singleton method.
-	public static ETASQLiteHelper getInstance(Context context) {
-		if (instance == null) {
-			instance = new ETASQLiteHelper(context);
-		}
-		return instance;
-	}
-	
-	// Method called during creation of the db.
-	@Override
-	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(create_appt_table);
-	}
+        public static final String APPT_TABLE = "appt";
+        
+        private static ETASQLiteHelper instance;
+        
+        
+        public interface ApptColumns extends BaseColumns {
+                public static final String NAME = "name";
+                public static final String PHONE = "phone";
+                public static final String DATE = "date";
+                public static final String FROM = "timeFrom"; //don't use from and to! Those are like sql key words!
+                public static final String TO = "timeTo";
+                public static final String LOCATION = "location";
+                public static final String NOTES = "notes";
+        }
+        
+        private static final String create_appt_table = "CREATE TABLE " + APPT_TABLE + " (  "
+                                                        + ApptColumns._ID + " integer primary key autoincrement, "
+                                                        + ApptColumns.NAME + " text not null, "
+                                                        + ApptColumns.PHONE + " text not null, " 
+                                                        + ApptColumns.DATE + " text not null, "
+                                                        + ApptColumns.FROM + " text not null, "
+                                                        + ApptColumns.TO + " text not null, "
+                                                        + ApptColumns.LOCATION + " text not null, "
+                                                        + ApptColumns.NOTES + " text not null"
+                                                        + "); ";
+        
+        
+        public ETASQLiteHelper(Context context) {
+                super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        }
+        
+        //singleton method.
+        public static ETASQLiteHelper getInstance(Context context) {
+                if (instance == null) {
+                        instance = new ETASQLiteHelper(context);
+                }
+                return instance;
+        }
+        
+        // Method called during creation of the db.
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+                db.execSQL(create_appt_table);
+        }
 
-	// Method is called during an upgrade of the db.
-	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		db.execSQL(create_appt_table);
-	}
+        // Method is called during an upgrade of the db.
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+                db.execSQL("DROP TABLE appt");
+                db.execSQL(create_appt_table);
+        }
 
 }

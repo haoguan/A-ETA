@@ -1,5 +1,6 @@
 package edu.berkeley.cs160.groupa.eta;
 
+import edu.berkeley.cs160.groupa.eta.adapter.ApptCursorAdapter;
 import edu.berkeley.cs160.groupa.eta.model.ApptContentProvider;
 import edu.berkeley.cs160.groupa.eta.model.ETASQLiteHelper;
 import edu.berkeley.cs160.groupa.eta.model.ETASQLiteHelper.ApptColumns;
@@ -22,12 +23,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-public class HomeActivity extends Activity implements OnItemClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class HomeActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 
 	private static HomeActivity instance;
 	private SQLiteDatabase mDb;
 	ListView mApptList;
-	SimpleCursorAdapter mApptAdapter;
+	ApptCursorAdapter mApptAdapter;
 	
 	//ui elements
 	Button bAddJob;
@@ -49,14 +50,11 @@ public class HomeActivity extends Activity implements OnItemClickListener, Loade
 		createTestData();
 
 		// just need to set up appointments in list.
-		String[] from = new String[] { ApptColumns.NAME };
-		int[] to = new int[] { R.id.tv_appt_list_name };
 		getLoaderManager().initLoader(1, null, this);
-		mApptAdapter = new SimpleCursorAdapter(this, R.layout.appt_list_item, null, from, to, 0);
+		mApptAdapter = new ApptCursorAdapter(this, null);
 		if (mApptList != null) {
 			mApptList.setAdapter(mApptAdapter);
 		}
-		mApptList.setOnItemClickListener(this);
 		
 		bAddJob.setOnClickListener(new OnClickListener(){
 
@@ -97,12 +95,6 @@ public class HomeActivity extends Activity implements OnItemClickListener, Loade
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		mApptAdapter.swapCursor(null);
-	}
-
-	@Override
-	public void onItemClick(AdapterView<?> adapter, View v, int pos, long id) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void deleteTestData() {

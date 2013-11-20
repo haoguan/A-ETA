@@ -6,9 +6,14 @@ import java.util.Date;
 import java.util.Locale;
 
 import edu.berkeley.cs160.groupa.eta.fragment.DatePickerFragment;
+import edu.berkeley.cs160.groupa.eta.fragment.TimePickerFragment;
+import edu.berkeley.cs160.groupa.eta.model.ApptContentProvider;
+import edu.berkeley.cs160.groupa.eta.model.ETASQLiteHelper.ApptColumns;
 import android.app.Activity;
+import android.app.TimePickerDialog;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,9 +23,9 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
-public class AddJobActivity extends Activity implements
-		DatePickerDialog.OnDateSetListener {
+public class AddJobActivity extends Activity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
 	Button bCancel;
 	Button bContinue;
@@ -30,6 +35,8 @@ public class AddJobActivity extends Activity implements
 	EditText etTimeFrom;
 	EditText etTimeTo;
 	EditText etLocation;
+	EditText etNotes;
+	boolean setFromTime = false;
 
 	public final static int GET_LOCATION = 0x01;
 
@@ -49,6 +56,7 @@ public class AddJobActivity extends Activity implements
 		etTimeFrom = (EditText) findViewById(R.id.et_add_job_time_from);
 		etTimeTo = (EditText) findViewById(R.id.et_add_job_time_to);
 		etLocation = (EditText) findViewById(R.id.et_add_job_location);
+		etNotes = (EditText) findViewById(R.id.et_add_job_notes);
 
 		bCancel.setOnClickListener(new OnClickListener() {
 
@@ -63,7 +71,16 @@ public class AddJobActivity extends Activity implements
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-
+				ContentValues values = new ContentValues();
+				values.put(ApptColumns.NAME, etName.getText().toString());
+				values.put(ApptColumns.PHONE, etPhone.getText().toString());
+				values.put(ApptColumns.DATE, etDate.getText().toString());
+				values.put(ApptColumns.FROM, etTimeFrom.getText().toString());
+				values.put(ApptColumns.TO, etTimeTo.getText().toString());
+				values.put(ApptColumns.LOCATION, etLocation.getText().toString());
+				values.put(ApptColumns.NOTES, etNotes.getText().toString());
+				getContentResolver().insert(ApptContentProvider.CONTENT_URI, values);
+				finish();
 			}
 
 		});
@@ -81,14 +98,40 @@ public class AddJobActivity extends Activity implements
 			}
 		});
 
+		etTimeFrom.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				// TODO Auto-generated method stub
+				if (hasFocus) {
+					setFromTime = true;
+					DialogFragment newFragment = new TimePickerFragment();
+					newFragment.show(getFragmentManager(), "fromTimePicker");
+					v.clearFocus();
+				}
+			}
+		});
+
+		etTimeTo.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				// TODO Auto-generated method stub
+				if (hasFocus) {
+					setFromTime = false;
+					DialogFragment newFragment = new TimePickerFragment();
+					newFragment.show(getFragmentManager(), "fromTimePicker");
+					v.clearFocus();
+				}
+			}
+		});
+
 		etLocation.setOnFocusChangeListener(new OnFocusChangeListener() {
 
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
 				// TODO Auto-generated method stub
 				if (hasFocus) {
-					Intent i = new Intent(v.getContext(),
-							SetLocationActivity.class);
+					Intent i = new Intent(v.getContext(), SetLocationActivity.class);
 					String curLocation = etLocation.getText().toString();
 					if (!curLocation.equals("")) {
 						i.putExtra("curLocation", curLocation);
@@ -120,7 +163,23 @@ public class AddJobActivity extends Activity implements
 		// TODO Auto-generated method stub
 		Calendar cal = Calendar.getInstance();
 		cal.set(year, month, day);
-		etDate.setText(cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH) + ", " + (month + 1) + "/" + day + "/" + year);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("EEEEEEEE, MM/dd/yy");
+		etDate.setText(dateFormat.format(cal.getTime()));
+	}
+
+	@Override
+	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+		// TODO Auto-generated method stub
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+		cal.set(Calendar.MINUTE, minute);
+		if (setFromTime) {
+			SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+			etTimeFrom.setText(timeFormat.format(cal.getTime()));
+		} else {
+			SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+			etTimeTo.setText(timeFormat.format(cal.getTime()));
+		}
 	}
 
 }

@@ -41,7 +41,8 @@ public class ApptContentProvider extends ContentProvider {
 		ApptColumns.DATE,
 		ApptColumns.FROM,
 		ApptColumns.TO,
-		ApptColumns.LOCATION
+		ApptColumns.LOCATION,
+		ApptColumns.NOTES
 	};
 	
 	@Override
