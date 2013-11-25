@@ -29,7 +29,7 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 	private SQLiteDatabase mDb;
 	ListView mApptList;
 	ApptCursorAdapter mApptAdapter;
-	
+
 	//ui elements
 	Button bAddJob;
 
@@ -45,7 +45,7 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 
 		bAddJob = (Button) findViewById(R.id.b_add_new_job);
 		mApptList = (ListView) findViewById(R.id.lv_appts);
-		
+
 		deleteTestData();
 		createTestData();
 
@@ -55,7 +55,7 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 		if (mApptList != null) {
 			mApptList.setAdapter(mApptAdapter);
 		}
-		
+
 		bAddJob.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -64,7 +64,7 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 				Intent intent = new Intent(v.getContext(), AddJobActivity.class);
 				startActivity(intent);
 			}
-			
+
 		});
 	}
 
@@ -81,7 +81,7 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 		// creating a Cursor for the data being displayed.
 		String select = "((" + ApptColumns.NAME + " NOTNULL) AND (" + ApptColumns.PHONE + " NOTNULL) AND (" + ApptColumns.DATE + " != '' ) AND (" + ApptColumns.FROM + " != '' ) AND ("
 				+ ApptColumns.TO + " != '' ) AND (" + ApptColumns.LOCATION + " != '' ))";
-		CursorLoader cursorLoader = new CursorLoader(this, ApptContentProvider.CONTENT_URI, ApptContentProvider.APPTS_PROJECTION, select, null, null);
+		CursorLoader cursorLoader = new CursorLoader(this, ApptContentProvider.CONTENT_URI, ApptContentProvider.APPTS_PROJECTION, select, null, ApptColumns.FROM + " ASC");
 		return cursorLoader;
 	}
 

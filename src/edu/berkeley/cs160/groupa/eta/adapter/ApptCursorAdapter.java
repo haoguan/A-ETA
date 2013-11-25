@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ApptCursorAdapter extends CursorAdapter {
-	
+
     LayoutInflater mInflater;
 
     public ApptCursorAdapter(Context context, Cursor c) {
@@ -23,24 +23,24 @@ public class ApptCursorAdapter extends CursorAdapter {
         super(context, c, 0);
         mInflater = LayoutInflater.from(context);
     }
-    
+
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
     	//set start time
         TextView aptStartTime = (TextView)view.findViewById(R.id.tv_list_time);
         aptStartTime.setText(cursor.getString(cursor.getColumnIndex(ApptColumns.FROM)));
-        
+
         //set apt name
         TextView aptName = (TextView)view.findViewById(R.id.tv_appt_list_name);
         aptName.setText(cursor.getString(cursor.getColumnIndex(ApptColumns.NAME)));
-        
+
 //        int position = cursor.getPosition(); // that should be the same position
 //        if (mSelectedPosition == position) {
 //           view.setBackgroundColor(Color.RED);
 //        } else {
 //           view.setBackgroundColor(Color.WHITE);
 //        }
-        
+
     }
 
     @Override
@@ -50,14 +50,14 @@ public class ApptCursorAdapter extends CursorAdapter {
         LinearLayout llName = (LinearLayout) v.findViewById(R.id.ll_list_name);
         LinearLayout llTravel = (LinearLayout) v.findViewById(R.id.ll_list_travel);
         llName.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				
+
 			}
 		});
 		llTravel.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
