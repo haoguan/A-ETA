@@ -78,7 +78,6 @@
             android:background="@drawable/rounded_edit_text"
             android:paddingLeft="10dp"
             android:singleLine="true"
-            android:text="Howard Guan"
             android:hint="Name" />
 
         <ImageView
@@ -101,7 +100,6 @@
             android:paddingLeft="10dp"
             android:inputType="phone"
             android:singleLine="true"
-            android:text="5105089476"
             android:hint="Phone" />
 
         <ImageView
@@ -123,7 +121,6 @@
             android:background="@drawable/rounded_edit_text"
             android:paddingLeft="10dp"
             android:singleLine="true"
-            android:text="Sunday, 11/17/13"
             android:hint="Date" />
 
         <ImageView
@@ -153,7 +150,6 @@
                 android:background="@drawable/rounded_edit_text"
                 android:paddingLeft="10dp"
                 android:singleLine="true"
-                android:text="11:15 AM"
             	android:hint="From" />
 
             <TextView
@@ -172,7 +168,6 @@
                 android:background="@drawable/rounded_edit_text"
                 android:paddingLeft="10dp"
                 android:singleLine="true"
-                android:text="01:15 PM"
             	android:hint="To" />
         </LinearLayout>
 
