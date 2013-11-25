@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class AddJobActivity extends Activity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
@@ -72,14 +73,33 @@ public class AddJobActivity extends Activity implements DatePickerDialog.OnDateS
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				ContentValues values = new ContentValues();
-				values.put(ApptColumns.NAME, etName.getText().toString());
-				values.put(ApptColumns.PHONE, etPhone.getText().toString());
-				values.put(ApptColumns.DATE, etDate.getText().toString());
-				values.put(ApptColumns.FROM, etTimeFrom.getText().toString());
-				values.put(ApptColumns.TO, etTimeTo.getText().toString());
-				values.put(ApptColumns.LOCATION, etLocation.getText().toString());
-				values.put(ApptColumns.NOTES, etNotes.getText().toString());
+				String name = etName.getText().toString();
+				String phone = etPhone.getText().toString();
+				String date = etDate.getText().toString();
+				String from = etTimeFrom.getText().toString();
+				String to = etTimeTo.getText().toString();
+				String location = etLocation.getText().toString();
+				String notes = etNotes.getText().toString();
+				String[] fieldNames = {"name", "phone", "date", "start time", "end time", "location"};
+				String[] fieldValues = {name, phone, date, from, to, location};
+				values.put(ApptColumns.NAME, name);
+				values.put(ApptColumns.PHONE, phone);
+				values.put(ApptColumns.DATE, date);
+				values.put(ApptColumns.FROM, from);
+				values.put(ApptColumns.TO, to);
+				values.put(ApptColumns.LOCATION, location);
+				values.put(ApptColumns.NOTES, notes);
 				getContentResolver().insert(ApptContentProvider.CONTENT_URI, values);
+				for (int i=0; i < fieldNames.length; i++) {
+					String value = fieldValues[i];
+					System.out.println("value: " + value);
+					if (value.equals(null) || value.equals("")) {
+						System.out.println("test2");
+						Toast toast = Toast.makeText(getApplicationContext(), "Missing " + fieldNames[i], Toast.LENGTH_SHORT);
+						toast.show();
+						return;
+					}
+				}
 				finish();
 			}
 
