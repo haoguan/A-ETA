@@ -98,6 +98,16 @@ public class AddJobActivity extends Activity implements DatePickerDialog.OnDateS
 				else {
 					values.put(ApptColumns.AM_PM, "PM");
 				}
+				
+				//check if twelve
+//				if (from.matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")){
+				if (from.matches("^(12:[0-5][0-9] [A|P][M]$)")){
+					values.put(ApptColumns.TWELVE, "A"); //will get sorted before others.
+					System.out.println("MATCHED 12!");
+				}
+				else {
+					values.put(ApptColumns.TWELVE, "B");
+				}
 				for (int i=0; i < fieldNames.length; i++) {
 					String value = fieldValues[i];
 					System.out.println("value: " + value);
