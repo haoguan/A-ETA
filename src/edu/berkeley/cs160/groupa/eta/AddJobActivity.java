@@ -80,6 +80,7 @@ public class AddJobActivity extends Activity implements DatePickerDialog.OnDateS
 				String to = etTimeTo.getText().toString();
 				String location = etLocation.getText().toString();
 				String notes = etNotes.getText().toString();
+				
 				String[] fieldNames = {"name", "phone", "date", "start time", "end time", "location"};
 				String[] fieldValues = {name, phone, date, from, to, location};
 				values.put(ApptColumns.NAME, name);
@@ -89,7 +90,14 @@ public class AddJobActivity extends Activity implements DatePickerDialog.OnDateS
 				values.put(ApptColumns.TO, to);
 				values.put(ApptColumns.LOCATION, location);
 				values.put(ApptColumns.NOTES, notes);
-				getContentResolver().insert(ApptContentProvider.CONTENT_URI, values);
+				
+				//check if am or pm
+				if (from.contains("AM")) {
+					values.put(ApptColumns.AM_PM, "AM");
+				}
+				else {
+					values.put(ApptColumns.AM_PM, "PM");
+				}
 				for (int i=0; i < fieldNames.length; i++) {
 					String value = fieldValues[i];
 					System.out.println("value: " + value);
@@ -100,6 +108,7 @@ public class AddJobActivity extends Activity implements DatePickerDialog.OnDateS
 						return;
 					}
 				}
+				getContentResolver().insert(ApptContentProvider.CONTENT_URI, values);
 				finish();
 			}
 

@@ -47,7 +47,7 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 		mApptList = (ListView) findViewById(R.id.lv_appts);
 
 		deleteTestData();
-		createTestData();
+//		createTestData();
 
 		// just need to set up appointments in list.
 		getLoaderManager().initLoader(1, null, this);
@@ -80,8 +80,9 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
 		String select = "((" + ApptColumns.NAME + " NOTNULL) AND (" + ApptColumns.PHONE + " NOTNULL) AND (" + ApptColumns.DATE + " != '' ) AND (" + ApptColumns.FROM + " != '' ) AND ("
-				+ ApptColumns.TO + " != '' ) AND (" + ApptColumns.LOCATION + " != '' ))";
-		CursorLoader cursorLoader = new CursorLoader(this, ApptContentProvider.CONTENT_URI, ApptContentProvider.APPTS_PROJECTION, select, null, ApptColumns.FROM + " ASC");
+				+ ApptColumns.TO + " != '' ) AND (" + ApptColumns.LOCATION + " != '' ) AND (" + ApptColumns.AM_PM + " != '' ))";
+		String orderBy = ApptColumns.AM_PM + ", " + ApptColumns.FROM;
+		CursorLoader cursorLoader = new CursorLoader(this, ApptContentProvider.CONTENT_URI, ApptContentProvider.APPTS_PROJECTION, select, null, orderBy);
 		return cursorLoader;
 	}
 

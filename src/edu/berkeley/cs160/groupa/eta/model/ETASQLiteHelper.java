@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 public class ETASQLiteHelper extends SQLiteOpenHelper {
         
         public static final String DATABASE_NAME = "eta";
-        private static final int DATABASE_VERSION = 6;
+        private static final int DATABASE_VERSION = 7;
 
         public static final String APPT_TABLE = "appt";
         
@@ -24,6 +24,7 @@ public class ETASQLiteHelper extends SQLiteOpenHelper {
                 public static final String TO = "timeTo";
                 public static final String LOCATION = "location";
                 public static final String NOTES = "notes";
+                public static final String AM_PM = "am_pm";
         }
         
         private static final String create_appt_table = "CREATE TABLE " + APPT_TABLE + " (  "
@@ -34,7 +35,8 @@ public class ETASQLiteHelper extends SQLiteOpenHelper {
                                                         + ApptColumns.FROM + " text not null, "
                                                         + ApptColumns.TO + " text not null, "
                                                         + ApptColumns.LOCATION + " text not null, "
-                                                        + ApptColumns.NOTES + " text not null"
+                                                        + ApptColumns.NOTES + " text not null, "
+                                                        + ApptColumns.AM_PM + " text not null"
                                                         + "); ";
         
         
@@ -45,7 +47,7 @@ public class ETASQLiteHelper extends SQLiteOpenHelper {
         //singleton method.
         public static ETASQLiteHelper getInstance(Context context) {
                 if (instance == null) {
-                        instance = new ETASQLiteHelper(context);
+                	instance = new ETASQLiteHelper(context);
                 }
                 return instance;
         }
