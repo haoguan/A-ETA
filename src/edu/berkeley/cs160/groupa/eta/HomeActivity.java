@@ -4,15 +4,21 @@ import edu.berkeley.cs160.groupa.eta.adapter.ApptCursorAdapter;
 import edu.berkeley.cs160.groupa.eta.model.ApptContentProvider;
 import edu.berkeley.cs160.groupa.eta.model.ETASQLiteHelper;
 import edu.berkeley.cs160.groupa.eta.model.ETASQLiteHelper.ApptColumns;
+import edu.berkeley.cs160.groupa.eta.widget.SwipeDismissListViewTouchListener;
+import android.location.Criteria;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,6 +28,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 public class HomeActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -29,6 +36,8 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 	private SQLiteDatabase mDb;
 	ListView mApptList;
 	ApptCursorAdapter mApptAdapter;
+	
+	private Cursor mOrgCursor;
 
 	//ui elements
 	Button bAddJob;
@@ -46,7 +55,7 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 		bAddJob = (Button) findViewById(R.id.b_add_new_job);
 		mApptList = (ListView) findViewById(R.id.lv_appts);
 
-		deleteTestData();
+//		deleteTestData();
 //		createTestData();
 
 		// just need to set up appointments in list.
@@ -55,6 +64,62 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 		if (mApptList != null) {
 			mApptList.setAdapter(mApptAdapter);
 		}
+		
+		SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        mApptList,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                	//content provider query.
+                                	String select = "((" + ApptColumns.NAME + " NOTNULL) AND (" + ApptColumns.PHONE + " NOTNULL) AND (" + ApptColumns.DATE + " != '' ) AND (" + ApptColumns.FROM + " != '' ) AND ("
+                            				+ ApptColumns.TO + " != '' ) AND (" + ApptColumns.LOCATION + " != '' ) AND (" + ApptColumns.AM_PM + " != '' ) AND (" + ApptColumns.TWELVE + " != '' ))";
+                                	String orderBy = ApptColumns.AM_PM + ", " + ApptColumns.TWELVE + ", " + ApptColumns.FROM;
+                                	Cursor apptCursor = getContentResolver().query(ApptContentProvider.CONTENT_URI, ApptContentProvider.APPTS_PROJECTION,
+                                			select, null, orderBy);
+//                                	if (apptCursor.moveToFirst()) {
+//                                		String[] columns = apptCursor.getColumnNames();
+//                                		MatrixCursor newCursor = new MatrixCursor(columns, 1);
+//                                		while (!apptCursor.isAfterLast()) {
+//                                			// only add the ones NOT to be deleted
+//                                			if (apptCursor.getPosition() != position) {
+//	                                			MatrixCursor.RowBuilder b = newCursor.newRow();
+//	                                			for (String col: columns) {
+//	                                				switch (apptCursor.getType(apptCursor.getColumnIndex(col))) {
+//	                                				case Cursor.FIELD_TYPE_INTEGER:
+//	                                					b.add(apptCursor.getInt(apptCursor.getColumnIndex(col)));
+//	                                					break;
+//	                                				case Cursor.FIELD_TYPE_STRING:
+//	                                					b.add(apptCursor.getString(apptCursor.getColumnIndex(col)));
+//	                                				}
+//	                                			}
+//                                			}
+//                                		}
+//                                		mApptAdapter.swapCursor(newCursor);
+//                                		//delete from original cursor
+//                                		apptCursor.moveToPosition(position);
+//                                		long id = apptCursor.getLong(apptCursor.getColumnIndex(ApptColumns._ID));
+//                                    	getContentResolver().delete(ApptContentProvider.CONTENT_URI, "_ID = " + id, null);
+////                                    	apptCursor.close();
+//                                	}
+                                	
+                                	apptCursor.moveToPosition(position);
+                                	long id = apptCursor.getLong(apptCursor.getColumnIndex(ApptColumns._ID));
+                                	getContentResolver().delete(ApptContentProvider.CONTENT_URI, "_ID = " + id, null);
+                                	apptCursor.close();
+//                                    mApptAdapter.remove(mApptAdapter.getItem(position));
+                                }
+                                mApptAdapter.notifyDataSetChanged();
+                            }
+                        });
+		
+		mApptList.setOnTouchListener(touchListener);
 
 		bAddJob.setOnClickListener(new OnClickListener(){
 
@@ -88,6 +153,11 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+//	    if (mOrgCursor != null)
+//	        mOrgCursor.close();
+//	    mOrgCursor = data;
+//	    mApptAdapter.changeCursor(mOrgCursor);
+	    
 		if (mApptAdapter != null && data != null) {
 			mApptAdapter.swapCursor(data);
 		}
@@ -95,8 +165,14 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
+//	    if (mOrgCursor != null) {
+//	        mOrgCursor.close();
+//	        mOrgCursor = null;
+//	    }
+//	    mApptAdapter.changeCursor(null);
 		mApptAdapter.swapCursor(null);
 	}
+
 
 	public void deleteTestData() {
 		// deletes everything! Because there is no "where" filter.

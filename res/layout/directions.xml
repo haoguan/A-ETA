@@ -71,6 +71,8 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/location_bg"
             android:hint="Destination..."
+            android:focusable="false"
+            android:singleLine="true"
             android:paddingLeft="60dp" />
     </LinearLayout>
 
