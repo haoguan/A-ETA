@@ -1,14 +1,21 @@
 package edu.berkeley.cs160.groupa.eta;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+
+import edu.berkeley.cs160.groupa.eta.fragment.AddJobConflictsFragment;
 import edu.berkeley.cs160.groupa.eta.fragment.DatePickerFragment;
 import edu.berkeley.cs160.groupa.eta.fragment.TimePickerFragment;
 import edu.berkeley.cs160.groupa.eta.model.ApptContentProvider;
 import edu.berkeley.cs160.groupa.eta.model.ETASQLiteHelper.ApptColumns;
+import edu.berkeley.cs160.groupa.eta.vo.Appointment;
+import edu.berkeley.cs160.groupa.eta.vo.AppointmentList;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.app.DatePickerDialog;
@@ -119,11 +126,19 @@ public class AddJobActivity extends Activity implements DatePickerDialog.OnDateS
 					}
 				}
 				
-				//check conflicts
-				String select = "((" + ApptColumns.NAME + " NOTNULL) AND (" + ApptColumns.PHONE + " NOTNULL) AND (" + ApptColumns.DATE + " != '' ) AND (" + ApptColumns.FROM + " != '' ) AND ("
-						+ ApptColumns.TO + " != '' ) AND (" + ApptColumns.LOCATION + " != '' ) AND (" + ApptColumns.AM_PM + " != '' ) AND (" + ApptColumns.TWELVE + " != '' ))";
-				String orderBy = ApptColumns.AM_PM + ", " + ApptColumns.TWELVE + ", " + ApptColumns.FROM;
-				Cursor checkCursor = getContentResolver().query(ApptContentProvider.CONTENT_URI, ApptContentProvider.APPTS_PROJECTION, select, null, orderBy);
+				//there is conflict, display dialog.
+				AppointmentList conflicts = getApptConflicts(from, to);
+				if (conflicts.size() > 0) {
+//					Toast toast = Toast.makeText(getApplicationContext(), "Conflict!", Toast.LENGTH_SHORT);
+//					toast.show();
+					DialogFragment conflictsFragment = new AddJobConflictsFragment();
+					//pass conflicts list as parcelable.
+					Bundle b = new Bundle();
+					b.putParcelable("conflictAppts", conflicts);
+					conflictsFragment.setArguments(b);
+					conflictsFragment.show(getFragmentManager(), "conflicts");
+					return;
+				}
 				
 				getContentResolver().insert(ApptContentProvider.CONTENT_URI, values);
 				finish();
@@ -226,6 +241,47 @@ public class AddJobActivity extends Activity implements DatePickerDialog.OnDateS
 			SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
 			etTimeTo.setText(timeFormat.format(cal.getTime()));
 		}
+	}
+	
+	//returns a list of conflicting appointments.
+	private AppointmentList getApptConflicts(String from, String to) {
+		AppointmentList conflicts = new AppointmentList();
+		//check conflicts
+		String select = "((" + ApptColumns.NAME + " NOTNULL) AND (" + ApptColumns.PHONE + " NOTNULL) AND (" + ApptColumns.DATE + " != '' ) AND (" + ApptColumns.FROM + " != '' ) AND ("
+				+ ApptColumns.TO + " != '' ) AND (" + ApptColumns.LOCATION + " != '' ) AND (" + ApptColumns.AM_PM + " != '' ) AND (" + ApptColumns.TWELVE + " != '' ))";
+		String orderBy = ApptColumns.AM_PM + ", " + ApptColumns.TWELVE + ", " + ApptColumns.FROM;
+		Cursor checkCursor = getContentResolver().query(ApptContentProvider.CONTENT_URI, ApptContentProvider.APPTS_PROJECTION, select, null, orderBy);
+		
+		//create my LocalTime objects for requested from and to times.
+		String pattern = "hh:mm aa";
+		LocalTime fromTime = LocalTime.parse(from, DateTimeFormat.forPattern(pattern)); 
+		LocalTime toTime = LocalTime.parse(to, DateTimeFormat.forPattern(pattern));
+		
+		//loop through all appts and check if start and end time of requested appt is in between
+		//assumes cursor are BEFORE first entry. Should be since database queries do that.
+		LocalTime apptFromTime;
+		LocalTime apptToTime;
+		while (checkCursor.moveToNext()) {
+			String apptFrom = checkCursor.getString(checkCursor.getColumnIndex(ApptColumns.FROM));
+			String apptTo = checkCursor.getString(checkCursor.getColumnIndex(ApptColumns.TO));
+			apptFromTime = LocalTime.parse(apptFrom, DateTimeFormat.forPattern(pattern));
+			apptToTime = LocalTime.parse(apptTo, DateTimeFormat.forPattern(pattern));
+			
+			if (isOverlapping(fromTime, toTime, apptFromTime, apptToTime)) {
+				//add to conflicts list
+				Appointment conflictAppt = new Appointment();
+				conflictAppt.setName(checkCursor.getString(checkCursor.getColumnIndex(ApptColumns.NAME)));
+				conflictAppt.setTimeFrom(apptFrom);
+				conflictAppt.setTimeTo(apptTo);
+				conflicts.add(conflictAppt);
+			}
+		}
+		return conflicts;
+	}
+	
+	//time overlap method!
+	public static boolean isOverlapping(LocalTime start1, LocalTime end1, LocalTime start2, LocalTime end2) {
+	    return !start1.isAfter(end2) && !start2.isAfter(end1);
 	}
 
 }

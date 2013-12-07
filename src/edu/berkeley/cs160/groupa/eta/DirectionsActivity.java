@@ -221,6 +221,10 @@ public class DirectionsActivity extends Activity {
 	            ArrayList<LatLng> directionPoint = md.getDirection(doc);
 	            return directionPoint;
 	        }
+	        else {
+	        	Toast toast = Toast.makeText(getApplicationContext(), "Sorry, out of queries for the day!", Toast.LENGTH_SHORT);
+				toast.show();
+	        }
 	    } catch (JSONException e) {
 	        e.printStackTrace();
 	    }
