@@ -3,8 +3,6 @@ package edu.berkeley.cs160.groupa.eta;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -12,6 +10,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -30,8 +29,6 @@ import edu.berkeley.cs160.groupa.eta.widget.GMapV2Direction;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.location.Address;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -122,6 +119,7 @@ public class DirectionsActivity extends Activity {
 			lastKnownLocation = manager.getLastKnownLocation(providerName);
 			from_lat = lastKnownLocation.getLatitude();
 			from_long = lastKnownLocation.getLongitude();
+			fromPosition = new LatLng(from_lat, from_long);
 
 			if (lastKnownLocation != null) {
 				Log.d("LOCATION LAT", String.valueOf(lastKnownLocation.getLatitude()));
@@ -147,29 +145,33 @@ public class DirectionsActivity extends Activity {
 		}
 		
 		protected void onPostExecute(ArrayList<LatLng> points) {
+			
+			//checks to make sure no quota issues. still displays the page.
+			if (toPosition != null) {
 				
-			//add markers and draw polylines for route
-			addMarker(map, from_lat, from_long, "Start", "Start Here!");
-			addMarker(map, to_lat, to_long, "End", "End Here!");
-			
-			//correct the zoom level
-			LatLngBounds.Builder b = new LatLngBounds.Builder();
-			b.include(fromPosition);
-			b.include(toPosition);
-			
-			LatLngBounds bounds = b.build();
-			
-			CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 500,500,5); //bounding box is 300 pixels surrounding markers.
-			map.animateCamera(cu);
-			
-			//draw the route path.
-            PolylineOptions rectLine = new PolylineOptions().width(20).color(getResources().getColor(R.color.etaRoutePurple));
-            
-            for(int i = 0; i < points.size(); i++) {
-            	rectLine.add(points.get(i));
-            }
-            
-            map.addPolyline(rectLine);
+				//add markers and draw polylines for route
+				addMarker(map, from_lat, from_long, "Start", "Start Here!");
+				addMarker(map, to_lat, to_long, "End", "End Here!");
+				
+				//correct the zoom level
+				LatLngBounds.Builder b = new LatLngBounds.Builder();
+				b.include(fromPosition);
+				b.include(toPosition);
+				
+				LatLngBounds bounds = b.build();
+				
+				CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 500,500,5); //bounding box is 300 pixels surrounding markers.
+				map.animateCamera(cu);
+				
+				//draw the route path.
+	            PolylineOptions rectLine = new PolylineOptions().width(20).color(getResources().getColor(R.color.etaRoutePurple));
+	            
+	            for(int i = 0; i < points.size(); i++) {
+	            	rectLine.add(points.get(i));
+	            }
+	            
+	            map.addPolyline(rectLine);
+			}
 			
 		}
 		
@@ -201,33 +203,31 @@ public class DirectionsActivity extends Activity {
 	    JSONObject jsonObject = new JSONObject();
 	    try {
 	        jsonObject = new JSONObject(stringBuilder.toString());
+	        
+	        JSONArray data = jsonObject.getJSONArray("results");
+	        JSONObject mainObj = data.getJSONObject(0); //NOT WRONG. JUST OVER QUERY LIMIT LOL.
+	        if (mainObj != null) {
+				JSONObject locationObj = mainObj.getJSONObject("geometry").getJSONObject("location");
+				geoDest = new LatLng(locationObj.getDouble("lat"), locationObj.getDouble("lng"));
+				
+				to_lat = geoDest.latitude;
+				to_long = geoDest.longitude;
+				
+	            toPosition = new LatLng(to_lat, to_long);
+	            
+	            GMapV2Direction md = new GMapV2Direction();
+	            
+	            Document doc = md.getDocument(fromPosition, toPosition, GMapV2Direction.MODE_DRIVING);
+	            ArrayList<LatLng> directionPoint = md.getDirection(doc);
+	            return directionPoint;
+	        }
 	    } catch (JSONException e) {
 	        e.printStackTrace();
 	    }
 	    
 		//get first object.
-		JSONObject mainObj = jsonObject.optJSONArray("results").optJSONObject(0);
 		//get location object
-		JSONObject locationObj = mainObj.optJSONObject("geometry").optJSONObject("location");
-		try {
-			geoDest = new LatLng(locationObj.getDouble("lat"), locationObj.getDouble("lng"));
-			
-			to_lat = geoDest.latitude;
-			to_long = geoDest.longitude;
-			
-			fromPosition = new LatLng(from_lat, from_long);
-            toPosition = new LatLng(to_lat, to_long);
-            
-            GMapV2Direction md = new GMapV2Direction();
-            
-            Document doc = md.getDocument(fromPosition, toPosition, GMapV2Direction.MODE_DRIVING);
-            ArrayList<LatLng> directionPoint = md.getDirection(doc);
-            return directionPoint;
-			
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		JSONObject locationObj = mainObj.optJSONObject("geometry").optJSONObject("location");
 		return null;
 	}
 	
