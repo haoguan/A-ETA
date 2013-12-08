@@ -41,6 +41,7 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 
 	//ui elements
 	Button bAddJob;
+	Button bRunningLate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,7 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 		mDb = ETASQLiteHelper.getInstance(this).getWritableDatabase();
 
 		bAddJob = (Button) findViewById(R.id.b_add_new_job);
+		bRunningLate = (Button) findViewById(R.id.b_home_late);
 		mApptList = (ListView) findViewById(R.id.lv_appts);
 
 //		deleteTestData();
@@ -131,6 +133,19 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 			}
 
 		});
+		
+		bRunningLate.setOnClickListener(new OnClickListener(){
+			
+			@Override
+			public void onClick(View v) {
+				// start add job activity.
+				Intent intent = new Intent(v.getContext(), RunningLateActivity.class);
+				startActivity(intent);
+			}
+			
+		});
+		
+		
 	}
 
 	@Override

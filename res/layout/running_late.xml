@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/etaBeige"
+    android:orientation="vertical"
+    android:weightSum="10" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:background="@color/etaBlue"
+        android:orientation="horizontal"
+        android:weightSum="10" >
+
+        <Button
+            android:id="@+id/b_late_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_weight="3"
+            android:background="@drawable/cancel_button"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_late_by"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:text="Late By"
+            android:textColor="@color/etaWhite"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/b_late_done"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_weight="3"
+            android:background="@drawable/continue_button"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="75dp"
+        android:layout_marginRight="65dp"
+        android:layout_weight="0.8"
+        android:background="@color/etaBeige"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:text="Running late by"
+            android:layout_weight="0.2"
+            android:textColor="@color/etaBlack"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/b_home_late"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.8"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="0.7"
+        android:weightSum="10"
+        android:background="@color/etaBeige"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="left"
+            android:text="New Schedule"
+            android:textColor="@color/etaBlack"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_weight="5"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+             />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="right"
+            android:text="Notify?"
+            android:textColor="@color/etaBlack"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_weight="5"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_late_appts"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="7"
+        android:background="@color/etaBeige" />
+
+</LinearLayout>

@@ -20,11 +20,15 @@ public class ApptContentProvider extends ContentProvider {
 	// used for URI matching
 	public final static int APPTS = 10;
 	public final static int APPTS_ID = 20;
+//	public final static int COPY_APPTS = 30;
+//	public final static int COPY_APPTS_ID = 40;
 	
 	private final static String AUTHORITY = "edu.berkeley.cs160.groupa.eta.model"; 
 	private final static String BASE_PATH = "apptlists";
+//	private final static String COPY_BASE_PATH = "copyApptlists";
 	
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
+//	public static final Uri COPY_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
 	public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/apps";
 	public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/app";
 	
@@ -32,6 +36,8 @@ public class ApptContentProvider extends ContentProvider {
 	static {
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH, APPTS);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", APPTS_ID);
+//		sURIMatcher.addURI(AUTHORITY, COPY_BASE_PATH, APPTS_ID);
+//		sURIMatcher.addURI(AUTHORITY, COPY_BASE_PATH + "/#", APPTS_ID);
 	}
 	
 	public static final String[] APPTS_PROJECTION = new String[] {
