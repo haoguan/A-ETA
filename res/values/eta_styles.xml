@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-   
+
     <!-- Colors -->
     <color name="etaBlack">#282828</color>
     <color name="etaBlue">#1d6e8b</color>
@@ -10,7 +10,20 @@
     <color name="etaWhite">#ffffff</color>
     <color name="etaDialogBlue">#50a5bb</color>
     <color name="etaRoutePurple">#8A5786</color>
-    
+
+    <!-- spinner array -->
+
+    <string-array name="late_times">
+        <item>15 min</item>
+        <item>30 min</item>
+        <item>45 min</item>
+        <item>1 hr</item>
+        <item>1 hr, 15 min</item>
+        <item>1 hr, 30 min</item>
+        <item>1 hr, 45 min</item>
+        <item>2 hr</item>
+    </string-array>
+
     <!-- Styles -->
     <style name="conflicts_dialog_appt_name">
         <item name="android:layout_width">fill_parent</item>
@@ -21,7 +34,7 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
     <style name="conflicts_dialog_appt_time">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -30,5 +43,5 @@
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-    
+
 </resources>

@@ -9,10 +9,10 @@ import android.provider.BaseColumns;
 public class ETASQLiteHelper extends SQLiteOpenHelper {
         
         public static final String DATABASE_NAME = "eta";
-        private static final int DATABASE_VERSION = 8;
+        private static final int DATABASE_VERSION = 9;
 
         public static final String APPT_TABLE = "appt";
-//        public static final String COPY_APPT_TABLE = "copy_appt";
+        public static final String COPY_APPT_TABLE = "copy_appt";
         
         private static ETASQLiteHelper instance;
         
@@ -42,18 +42,18 @@ public class ETASQLiteHelper extends SQLiteOpenHelper {
                                                         + ApptColumns.TWELVE + " text not null"
                                                         + "); ";
         
-//        private static final String create_copy_appt_table = "CREATE TABLE " + COPY_APPT_TABLE + " (  "
-//        		+ ApptColumns._ID + " integer primary key autoincrement, "
-//        		+ ApptColumns.NAME + " text not null, "
-//        		+ ApptColumns.PHONE + " text not null, " 
-//        		+ ApptColumns.DATE + " text not null, "
-//        		+ ApptColumns.FROM + " text not null, "
-//        		+ ApptColumns.TO + " text not null, "
-//        		+ ApptColumns.LOCATION + " text not null, "
-//        		+ ApptColumns.NOTES + " text not null, "
-//        		+ ApptColumns.AM_PM + " text not null, "
-//        		+ ApptColumns.TWELVE + " text not null"
-//        		+ "); ";
+        private static final String create_copy_appt_table = "CREATE TABLE " + COPY_APPT_TABLE + " (  "
+        		+ ApptColumns._ID + " integer primary key autoincrement, "
+        		+ ApptColumns.NAME + " text not null, "
+        		+ ApptColumns.PHONE + " text not null, " 
+        		+ ApptColumns.DATE + " text not null, "
+        		+ ApptColumns.FROM + " text not null, "
+        		+ ApptColumns.TO + " text not null, "
+        		+ ApptColumns.LOCATION + " text not null, "
+        		+ ApptColumns.NOTES + " text not null, "
+        		+ ApptColumns.AM_PM + " text not null, "
+        		+ ApptColumns.TWELVE + " text not null"
+        		+ "); ";
         
         
         public ETASQLiteHelper(Context context) {
@@ -72,15 +72,16 @@ public class ETASQLiteHelper extends SQLiteOpenHelper {
         @Override
         public void onCreate(SQLiteDatabase db) {
                 db.execSQL(create_appt_table);
-//                db.execSQL(create_copy_appt_table);
+                db.execSQL(create_copy_appt_table);
         }
 
         // Method is called during an upgrade of the db.
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
                 db.execSQL("DROP TABLE appt");
+                db.execSQL("DROP TABLE copy_appt");
                 db.execSQL(create_appt_table);
-//                db.execSQL(create_copy_appt_table);
+                db.execSQL(create_copy_appt_table);
         }
 
 }

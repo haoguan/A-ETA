@@ -20,15 +20,15 @@ public class ApptContentProvider extends ContentProvider {
 	// used for URI matching
 	public final static int APPTS = 10;
 	public final static int APPTS_ID = 20;
-//	public final static int COPY_APPTS = 30;
-//	public final static int COPY_APPTS_ID = 40;
+	public final static int COPY_APPTS = 30;
+	public final static int COPY_APPTS_ID = 40;
 	
 	private final static String AUTHORITY = "edu.berkeley.cs160.groupa.eta.model"; 
 	private final static String BASE_PATH = "apptlists";
-//	private final static String COPY_BASE_PATH = "copyApptlists";
+	private final static String COPY_BASE_PATH = "copyApptlists";
 	
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
-//	public static final Uri COPY_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
+	public static final Uri COPY_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
 	public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/apps";
 	public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/app";
 	
@@ -36,8 +36,8 @@ public class ApptContentProvider extends ContentProvider {
 	static {
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH, APPTS);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", APPTS_ID);
-//		sURIMatcher.addURI(AUTHORITY, COPY_BASE_PATH, APPTS_ID);
-//		sURIMatcher.addURI(AUTHORITY, COPY_BASE_PATH + "/#", APPTS_ID);
+		sURIMatcher.addURI(AUTHORITY, COPY_BASE_PATH, APPTS_ID);
+		sURIMatcher.addURI(AUTHORITY, COPY_BASE_PATH + "/#", APPTS_ID);
 	}
 	
 	public static final String[] APPTS_PROJECTION = new String[] {
@@ -65,16 +65,25 @@ public class ApptContentProvider extends ContentProvider {
 		//Using SQLiteBuilder instead of query() method
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 		
-		//set table
-		queryBuilder.setTables(APPT_TABLE);
-		
 		//determine if query is for a single entry or all entries.
 		int uriType = sURIMatcher.match(uri);
 		switch(uriType) {
 		case APPTS:
-			// no filter
+			//set table
+			queryBuilder.setTables(APPT_TABLE);
 			break;
 		case APPTS_ID:
+			queryBuilder.setTables(APPT_TABLE);
+			//Adding the ID to the original query
+			queryBuilder.appendWhere(ApptColumns._ID + "="
+					+ uri.getLastPathSegment());
+			break;
+		case COPY_APPTS:
+			//set table
+			queryBuilder.setTables(COPY_APPT_TABLE);
+			break;
+		case COPY_APPTS_ID:
+			queryBuilder.setTables(COPY_APPT_TABLE);
 			//Adding the ID to the original query
 			queryBuilder.appendWhere(ApptColumns._ID + "="
 					+ uri.getLastPathSegment());
@@ -105,12 +114,15 @@ public class ApptContentProvider extends ContentProvider {
 		switch(uriType) {
 		case APPTS:
 			id = database.insert(APPT_TABLE, null, values);
-			break;
+			getContext().getContentResolver().notifyChange(uri, null);
+			return Uri.parse(BASE_PATH + "/" + id);
+		case COPY_APPTS:
+			id = database.insert(COPY_APPT_TABLE, null, values);
+			getContext().getContentResolver().notifyChange(uri, null);
+			return Uri.parse(COPY_BASE_PATH + "/" + id);
 		default:
 			throw new IllegalArgumentException("Unknown URI: " + uri);
 		}
-		getContext().getContentResolver().notifyChange(uri, null);
-		return Uri.parse(BASE_PATH + "/" + id);
 	}
 	
 
@@ -131,6 +143,20 @@ public class ApptContentProvider extends ContentProvider {
 			} else {
 				rowsDeleted = database.delete(APPT_TABLE, 
 					ApptColumns._ID + "=" + id + " and " + selection, selectionArgs);
+			}
+			break;
+		case COPY_APPTS:
+			rowsDeleted = database.delete(COPY_APPT_TABLE, selection, selectionArgs);
+			break;
+		case COPY_APPTS_ID:
+			String copyId = uri.getLastPathSegment();
+			//depends on selection param, need to alter SQL command.
+			if (TextUtils.isEmpty(selection)) {
+				rowsDeleted = database.delete(COPY_APPT_TABLE, 
+						ApptColumns._ID + "=" + copyId, null);
+			} else {
+				rowsDeleted = database.delete(COPY_APPT_TABLE, 
+						ApptColumns._ID + "=" + copyId + " and " + selection, selectionArgs);
 			}
 			break;
 		default:
@@ -158,6 +184,20 @@ public class ApptContentProvider extends ContentProvider {
 			} else {
 				rowsUpdated = database.update(APPT_TABLE, values, 
 						ApptColumns._ID + "=" + id + " and " + selection, selectionArgs);
+			}
+			break;
+		case COPY_APPTS:
+			rowsUpdated = database.update(COPY_APPT_TABLE, values, 
+					selection, selectionArgs);
+			break;
+		case COPY_APPTS_ID:
+			String copyId = uri.getLastPathSegment();
+			if (TextUtils.isEmpty(selection)) {
+				rowsUpdated = database.update(COPY_APPT_TABLE, values, 
+						ApptColumns._ID + "=" + copyId, null);
+			} else {
+				rowsUpdated = database.update(COPY_APPT_TABLE, values, 
+						ApptColumns._ID + "=" + copyId + " and " + selection, selectionArgs);
 			}
 			break;
 		default:

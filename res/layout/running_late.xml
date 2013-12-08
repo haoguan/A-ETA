@@ -57,8 +57,8 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="75dp"
-        android:layout_marginRight="65dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
         android:layout_weight="0.8"
         android:background="@color/etaBeige"
         android:orientation="horizontal" >
@@ -68,15 +68,14 @@
             android:layout_height="fill_parent"
             android:gravity="center"
             android:text="Running late by"
-            android:layout_weight="0.2"
             android:textColor="@color/etaBlack"
             android:textSize="20sp" />
 
         <Spinner
-            android:id="@+id/b_home_late"
+            android:id="@+id/spinner_late"
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="0.8"
+            android:layout_weight="1"
             android:gravity="center" />
     </LinearLayout>
 

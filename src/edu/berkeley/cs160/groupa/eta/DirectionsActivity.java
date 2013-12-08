@@ -96,6 +96,17 @@ public class DirectionsActivity extends Activity {
 				startActivity(i);
 			}
 		});
+		
+		bRunningLate.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				finish(); // no need to come back.
+				Intent i = new Intent(v.getContext(), RunningLateActivity.class);
+				startActivity(i);
+			}
+		});
 	}
 
 	private void addMarker(GoogleMap map, double lat, double lon, String string, String string2) {
