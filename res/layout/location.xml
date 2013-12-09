@@ -69,7 +69,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:paddingLeft="60dp"
+            android:paddingLeft="50dp"
             android:background="@drawable/location_bg"
             android:hint="Address"
             android:singleLine="true"

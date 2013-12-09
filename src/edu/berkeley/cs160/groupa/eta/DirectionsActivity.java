@@ -343,7 +343,7 @@ public class DirectionsActivity extends Activity {
 				JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
 
 				String dist = legs.getJSONObject("distance").getString("text");
-				String time = legs.getJSONObject("duration").getString("text");
+				String time = "(" + legs.getJSONObject("duration").getString("text") + ")";
 
 				DistanceTimeObj ret = new DistanceTimeObj(dist, time, via);
 

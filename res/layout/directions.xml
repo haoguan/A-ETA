@@ -72,7 +72,7 @@
             android:background="@drawable/location_bg"
             android:focusable="false"
             android:hint="Destination..."
-            android:paddingLeft="60dp"
+            android:paddingLeft="50dp"
             android:singleLine="true" />
     </LinearLayout>
 
