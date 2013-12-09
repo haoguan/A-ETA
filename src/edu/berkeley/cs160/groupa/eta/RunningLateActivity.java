@@ -2,6 +2,9 @@ package edu.berkeley.cs160.groupa.eta;
 
 import java.util.ArrayList;
 
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+
 import edu.berkeley.cs160.groupa.eta.adapter.ApptCursorAdapter;
 import edu.berkeley.cs160.groupa.eta.adapter.LateApptCursorAdapter;
 import edu.berkeley.cs160.groupa.eta.model.ApptContentProvider;
@@ -16,12 +19,15 @@ import android.telephony.SmsManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -39,6 +45,10 @@ public class RunningLateActivity extends Activity implements
 	Button bDone;
 
 	Spinner spinLate;
+	int hoursLate = 0;
+	int minsLate = 0;
+	
+	String pattern = "hh:mm aa";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,32 +116,45 @@ public class RunningLateActivity extends Activity implements
 						e.printStackTrace();
 					}
 				}
+				
+				//update schedule
+				mDb.execSQL("DELETE FROM appt");
+				// copy apptlists to copy table
+				mDb.execSQL("INSERT INTO " + ETASQLiteHelper.APPT_TABLE
+						+ " SELECT * FROM " + ETASQLiteHelper.COPY_APPT_TABLE);
+				Intent i = new Intent(v.getContext(), HomeActivity.class);
+				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(i);
+				finish();
 			}
+		});
+		
+		spinLate.setOnItemSelectedListener(new OnItemSelectedListener() {
+		    @Override
+		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+		        // your code here
+		    	updatePreviewTable();
+		    }
+
+		    @Override
+		    public void onNothingSelected(AdapterView<?> parentView) {
+		        // your code here
+		    }
+
 		});
 	}
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-
-		// clear copy apptLists first
-		mDb.execSQL("DELETE FROM copy_appt");
-		// copy apptlists to copy table
-		mDb.execSQL("INSERT INTO " + ETASQLiteHelper.COPY_APPT_TABLE
-				+ " SELECT * FROM " + ETASQLiteHelper.APPT_TABLE);
 		
-		//take spinner value and update all entries in table.
+		String select = "((" + ApptColumns.NAME + " NOTNULL) AND (" + ApptColumns.PHONE + " NOTNULL) AND (" + ApptColumns.DATE + " != '' ) AND (" + ApptColumns.FROM + " != '' ) AND ("
+				+ ApptColumns.TO + " != '' ) AND (" + ApptColumns.LOCATION + " != '' ) AND (" + ApptColumns.AM_PM + " != '' ) AND (" + ApptColumns.TWELVE + " != '' ))";
+		String orderBy = ApptColumns.AM_PM + ", " + ApptColumns.TWELVE + ", " + ApptColumns.FROM;
 		
+		updatePreviewTable();
 
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
-		String select = "((" + ApptColumns.NAME + " NOTNULL) AND ("
-				+ ApptColumns.PHONE + " NOTNULL) AND (" + ApptColumns.DATE
-				+ " != '' ) AND (" + ApptColumns.FROM + " != '' ) AND ("
-				+ ApptColumns.TO + " != '' ) AND (" + ApptColumns.LOCATION
-				+ " != '' ) AND (" + ApptColumns.AM_PM + " != '' ) AND ("
-				+ ApptColumns.TWELVE + " != '' ))";
-		String orderBy = ApptColumns.AM_PM + ", " + ApptColumns.TWELVE + ", "
-				+ ApptColumns.FROM;
 		CursorLoader cursorLoader = new CursorLoader(this,
 				ApptContentProvider.COPY_CONTENT_URI,
 				ApptContentProvider.APPTS_PROJECTION, select, null, orderBy);
@@ -151,5 +174,66 @@ public class RunningLateActivity extends Activity implements
 	public void onLoaderReset(Loader<Cursor> loader) {
 		// TODO Auto-generated method stub
 		mLateApptAdapter.swapCursor(null);
+	}
+	
+	private String[] getSpinnerValues() {
+		String spinVal = ((String) spinLate.getSelectedItem());
+		return spinVal.split(",");
+	}
+	
+	private void updatePreviewTable() {
+		// clear copy apptLists first
+		mDb.execSQL("DELETE FROM copy_appt");
+		// copy apptlists to copy table
+		mDb.execSQL("INSERT INTO " + ETASQLiteHelper.COPY_APPT_TABLE
+				+ " SELECT * FROM " + ETASQLiteHelper.APPT_TABLE);
+		
+		//take spinner value and update all entries in table.
+		String[] spinVals = getSpinnerValues();
+		for (String time : spinVals) {
+			//strip away the suffix
+			if (time.contains("hr")) {
+				hoursLate = Integer.parseInt(time.replaceAll("[^0-9]", "")); //replace all nondigits to blanks.
+			}
+			else {
+				minsLate = Integer.parseInt(time.replaceAll("[^0-9]", ""));
+			}
+		}
+		
+		String select = "((" + ApptColumns.NAME + " NOTNULL) AND (" + ApptColumns.PHONE + " NOTNULL) AND (" + ApptColumns.DATE + " != '' ) AND (" + ApptColumns.FROM + " != '' ) AND ("
+				+ ApptColumns.TO + " != '' ) AND (" + ApptColumns.LOCATION + " != '' ) AND (" + ApptColumns.AM_PM + " != '' ) AND (" + ApptColumns.TWELVE + " != '' ))";
+		String orderBy = ApptColumns.AM_PM + ", " + ApptColumns.TWELVE + ", " + ApptColumns.FROM;
+		Cursor updateCursor = getContentResolver().query(ApptContentProvider.COPY_CONTENT_URI, ApptContentProvider.APPTS_PROJECTION, select, null, orderBy);
+		String timeFrom;
+		String timeTo;
+		LocalTime ltFrom;
+		LocalTime ltTo;
+		while(updateCursor.moveToNext()) {
+			//retrieve info from db and convert to joda time
+			String id = updateCursor.getString(updateCursor.getColumnIndex(ApptColumns._ID));
+			timeFrom = updateCursor.getString(updateCursor.getColumnIndex(ApptColumns.FROM));
+			timeTo = updateCursor.getString(updateCursor.getColumnIndex(ApptColumns.TO));
+			ltFrom = LocalTime.parse(timeFrom, DateTimeFormat.forPattern(pattern));
+			ltTo = LocalTime.parse(timeTo, DateTimeFormat.forPattern(pattern));
+			
+			//add the late time.
+			ltFrom = ltFrom.plusHours(hoursLate);
+			ltFrom = ltFrom.plusMinutes(minsLate);
+			ltTo = ltTo.plusHours(hoursLate);
+			ltTo = ltTo.plusMinutes(minsLate);
+			
+			//readd to database
+			ContentValues newTimes = new ContentValues();
+			newTimes.put(ApptColumns.FROM, ltFrom.toString(pattern));
+			newTimes.put(ApptColumns.TO, ltTo.toString(pattern));
+			getContentResolver().update(ApptContentProvider.COPY_CONTENT_URI, newTimes, "_ID = ?", new String[]{id});
+		}
+		updateCursor.close();
+		resetTimeLate();
+	}
+	
+	private void resetTimeLate() {
+		hoursLate = 0;
+		minsLate = 0;
 	}
 }

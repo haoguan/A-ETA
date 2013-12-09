@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 public class ETASQLiteHelper extends SQLiteOpenHelper {
         
         public static final String DATABASE_NAME = "eta";
-        private static final int DATABASE_VERSION = 9;
+        private static final int DATABASE_VERSION = 10;
 
         public static final String APPT_TABLE = "appt";
         public static final String COPY_APPT_TABLE = "copy_appt";

@@ -28,7 +28,7 @@ public class ApptContentProvider extends ContentProvider {
 	private final static String COPY_BASE_PATH = "copyApptlists";
 	
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
-	public static final Uri COPY_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
+	public static final Uri COPY_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + COPY_BASE_PATH);
 	public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/apps";
 	public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/app";
 	
@@ -36,8 +36,8 @@ public class ApptContentProvider extends ContentProvider {
 	static {
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH, APPTS);
 		sURIMatcher.addURI(AUTHORITY, BASE_PATH + "/#", APPTS_ID);
-		sURIMatcher.addURI(AUTHORITY, COPY_BASE_PATH, APPTS_ID);
-		sURIMatcher.addURI(AUTHORITY, COPY_BASE_PATH + "/#", APPTS_ID);
+		sURIMatcher.addURI(AUTHORITY, COPY_BASE_PATH, COPY_APPTS);
+		sURIMatcher.addURI(AUTHORITY, COPY_BASE_PATH + "/#", COPY_APPTS_ID);
 	}
 	
 	public static final String[] APPTS_PROJECTION = new String[] {
