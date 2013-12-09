@@ -46,6 +46,7 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		instance = this;
 		// Remove title bar -> Must be before adding content.
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);

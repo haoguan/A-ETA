@@ -19,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -40,6 +41,7 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class DirectionsActivity extends Activity {
@@ -47,6 +49,9 @@ public class DirectionsActivity extends Activity {
 	Button bHome;
 	Button bRunningLate;
 	AutoCompleteTextView actvDest;
+	TextView tvTimeLeft;
+	TextView tvDistLeft;
+	TextView tvVia;
 
 	LocationManager manager;
 	String providerName;
@@ -74,6 +79,10 @@ public class DirectionsActivity extends Activity {
 		bHome = (Button) findViewById(R.id.b_directions_home);
 		bRunningLate = (Button) findViewById(R.id.b_directions_late);
 		actvDest = (AutoCompleteTextView) findViewById(R.id.actv_directions_destination);
+		tvTimeLeft = (TextView) findViewById(R.id.tv_time_left);
+		tvDistLeft = (TextView) findViewById(R.id.tv_dist_left);
+		tvVia = (TextView) findViewById(R.id.tv_via);
+		
 		MapFragment mapFrag = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
 		map = mapFrag.getMap();
 		checkLocation();
@@ -85,15 +94,17 @@ public class DirectionsActivity extends Activity {
 		
 		//run async task here
 		new GeocodeAddress(this).execute();
+		new FindDistanceAndTime(this).execute();
 		
 		bHome.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				finish(); // no need to come back.
 				Intent i = new Intent(v.getContext(), HomeActivity.class);
+				i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 				startActivity(i);
+				finish();
 			}
 		});
 		
@@ -102,15 +113,19 @@ public class DirectionsActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				finish(); // no need to come back.
 				Intent i = new Intent(v.getContext(), RunningLateActivity.class);
 				startActivity(i);
 			}
 		});
 	}
 
-	private void addMarker(GoogleMap map, double lat, double lon, String string, String string2) {
-		map.addMarker(new MarkerOptions().position(new LatLng(lat, lon)).title(string).snippet(string2));
+	private void addMarker(GoogleMap map, double lat, double lon, String string, String string2, boolean start) {
+		if (start) {
+			map.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_a)).position(new LatLng(lat, lon)).title(string).snippet(string2));
+		}
+		else {
+			map.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_b)).position(new LatLng(lat, lon)).title(string).snippet(string2));
+		}
 	}
 
 	public void checkLocation() {
@@ -141,6 +156,31 @@ public class DirectionsActivity extends Activity {
 		}
 	}
 	
+	class FindDistanceAndTime extends AsyncTask<Void, Void, DistanceTimeObj> {
+		Context mContext;
+		
+		FindDistanceAndTime(Context context) {
+			super();
+			mContext = context;
+		}
+		
+		protected DistanceTimeObj doInBackground(Void... params) {
+			//for current location
+			String from = from_lat + "," + from_long;
+			return getDistanceTime(from, stringDest);
+		}
+		
+		protected void onPostExecute(DistanceTimeObj distTime) {
+			//make sure routes actually found
+			if (distTime != null) {
+				tvTimeLeft.setText(distTime.getTime());
+				tvDistLeft.setText(distTime.getDist());
+				tvVia.setText("Via " + distTime.getVia());
+			}
+		}
+		
+	}
+	
 	class GeocodeAddress extends AsyncTask<Void, Void, ArrayList<LatLng>> {
 		
 		Context mContext;
@@ -161,8 +201,8 @@ public class DirectionsActivity extends Activity {
 			if (toPosition != null) {
 				
 				//add markers and draw polylines for route
-				addMarker(map, from_lat, from_long, "Start", "Start Here!");
-				addMarker(map, to_lat, to_long, "End", "End Here!");
+				addMarker(map, from_lat, from_long, "Start", "My Location", true);
+				addMarker(map, to_lat, to_long, "End", "Destination", false);
 				
 				//correct the zoom level
 				LatLngBounds.Builder b = new LatLngBounds.Builder();
@@ -194,7 +234,7 @@ public class DirectionsActivity extends Activity {
 		//replace address with + in place of spaces
 		String newAddress = address.replace(' ', '+');
 
-	    HttpGet httpGet = new HttpGet("http://maps.google.com/maps/api/geocode/json?address=" + newAddress + "&sensor=true");
+	    HttpGet httpGet = new HttpGet("http://maps.googleapis.com/maps/api/geocode/json?address=" + newAddress + "&sensor=true"); //maps.googleapis.com = V3!
 	    HttpClient client = new DefaultHttpClient();
 	    HttpResponse response;
 	    StringBuilder stringBuilder = new StringBuilder();
@@ -239,13 +279,101 @@ public class DirectionsActivity extends Activity {
 	    } catch (JSONException e) {
 	        e.printStackTrace();
 	    }
-	    
-		//get first object.
-		//get location object
-//		JSONObject locationObj = mainObj.optJSONObject("geometry").optJSONObject("location");
 		return null;
 	}
 	
+	//expects either street address or lat long coords.
+	public DistanceTimeObj getDistanceTime(String from, String to) {
+		
+		//replace address with + in place of spaces
+		String newFrom = from.replace(' ', '+');
+		String newTo = to.replace(' ', '+');
+		
+		HttpGet httpGet = new HttpGet("http://maps.googleapis.com/maps/api/directions/json?origin=" + newFrom + "&destination=" + newTo + "&sensor=false");
+	    HttpClient client = new DefaultHttpClient();
+	    HttpResponse response;
+	    StringBuilder stringBuilder = new StringBuilder();
+	    
+	    try {
+	        response = client.execute(httpGet);
+	        HttpEntity entity = response.getEntity();
+	        InputStream stream = entity.getContent();
+	        int b;
+	        while ((b = stream.read()) != -1) {
+	            stringBuilder.append((char) b);
+	        }
+	    } catch (ClientProtocolException e) {
+	        } catch (IOException e) {
+	    }
+	    
+	    JSONObject jsonObject = new JSONObject();
+	    try {
+	        jsonObject = new JSONObject(stringBuilder.toString());
+	        
+	        JSONArray data = jsonObject.getJSONArray("routes");
+	        JSONObject routes = data.getJSONObject(0); //NOT WRONG. JUST OVER QUERY LIMIT LOL.
+	        if (routes != null) {
+	        	String via = routes.getString("summary");
+	        	JSONObject legs = routes.getJSONArray("legs").getJSONObject(0);
+	        	
+	        	String dist = legs.getJSONObject("distance").getString("text");
+	            String time = legs.getJSONObject("duration").getString("text");
+	            
+	            DistanceTimeObj ret = new DistanceTimeObj(dist, time, via);
+	            
+	            return ret;
+	        }
+	        else {
+	        	Toast toast = Toast.makeText(getApplicationContext(), "Sorry, out of queries for the day!", Toast.LENGTH_SHORT);
+				toast.show();
+	        }
+	    } catch (JSONException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+		
+	}
+	
+	//object class to store both time and dist.
+	private class DistanceTimeObj {
+		
+		String time;
+		String dist;
+		String via;
+		
+		public DistanceTimeObj() {}
+		
+		public DistanceTimeObj(String time, String dist, String via) {
+			this.time = time;
+			this.dist = dist;
+			this.via = via;
+		}
+		
+		public String getVia() {
+			return via;
+		}
+
+		public void setVia(String via) {
+			this.via = via;
+		}
+
+		public String getTime() {
+			return time;
+		}
+
+		public void setTime(String time) {
+			this.time = time;
+		}
+
+		public String getDist() {
+			return dist;
+		}
+
+		public void setDist(String dist) {
+			this.dist = dist;
+		}
+
+	}
 	
 
 }

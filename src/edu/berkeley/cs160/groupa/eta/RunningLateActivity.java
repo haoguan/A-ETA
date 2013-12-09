@@ -118,6 +118,9 @@ public class RunningLateActivity extends Activity implements
 		// copy apptlists to copy table
 		mDb.execSQL("INSERT INTO " + ETASQLiteHelper.COPY_APPT_TABLE
 				+ " SELECT * FROM " + ETASQLiteHelper.APPT_TABLE);
+		
+		//take spinner value and update all entries in table.
+		
 
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.

@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/etaBeige"
     android:orientation="vertical"
-    android:weightSum="10"
-    android:background="@color/etaBeige" >
+    android:weightSum="10" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -70,10 +70,10 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/location_bg"
-            android:hint="Destination..."
             android:focusable="false"
-            android:singleLine="true"
-            android:paddingLeft="60dp" />
+            android:hint="Destination..."
+            android:paddingLeft="60dp"
+            android:singleLine="true" />
     </LinearLayout>
 
     <fragment
@@ -81,11 +81,62 @@
         android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:layout_weight="6"
-        android:layout_margin="10dp"
         android:background="@color/etaBeige" />
-    
-    <TextView 
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:weightSum="10"
+        android:orientation="horizontal"
+        android:background="@drawable/rounded_edit_text" >
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="10">
+
+            <TextView
+                android:id="@+id/tv_time_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="5dp"
+                android:gravity="left"
+                android:textColor="@color/etaBlue"
+                android:textSize="18sp" />
+            
+            <TextView
+                android:id="@+id/tv_dist_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:gravity="left"
+                android:textColor="@color/etaRed"
+                android:textSize="18sp"
+                android:layout_toRightOf="@+id/tv_time_left"
+                 />
+            
+            <TextView
+                android:id="@+id/tv_via"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textColor="@color/etaBlack"
+                android:textSize="15sp"
+                android:layout_below="@+id/tv_time_left"
+                android:layout_alignLeft="@+id/tv_time_left"
+                 />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!--
+         <TextView 
         android:id="@+id/tv_directions_step"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -99,5 +150,6 @@
         android:textStyle="bold"
         android:text="1. Head South on LeRoyAve"
         />
+    -->
 
 </LinearLayout>
