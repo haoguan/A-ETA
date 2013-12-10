@@ -38,6 +38,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="edu.berkeley.cs160.groupa.eta.JobDetailsActivity" />
         <activity android:name="edu.berkeley.cs160.groupa.eta.RunningLateActivity" />
         <activity android:name="edu.berkeley.cs160.groupa.eta.AddJobActivity" />
         <activity android:name="edu.berkeley.cs160.groupa.eta.DirectionsActivity" />

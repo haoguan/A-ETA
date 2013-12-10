@@ -68,8 +68,7 @@ public class RunningLateActivity extends Activity implements
 		ArrayAdapter<CharSequence> lateByAdapter = ArrayAdapter
 				.createFromResource(this, R.array.late_times,
 						R.layout.spinner_item);
-		lateByAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		lateByAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinLate.setAdapter(lateByAdapter);
 		spinLate.setSelection(4);
 
@@ -103,7 +102,7 @@ public class RunningLateActivity extends Activity implements
 					String phone = appt.getPhone();
 					// create message and text that number.
 					String message = "Hello " + name
-							+ "! Sorry, but I will be late by " + lateBy + ".";
+							+ "! Sorry, but I will be late by " + lateBy + ". \n\n -ETA";
 					try {
 						SmsManager smsManager = SmsManager.getDefault();
 						smsManager.sendTextMessage(phone, null, message, null, null);
@@ -193,7 +192,7 @@ public class RunningLateActivity extends Activity implements
 		for (String time : spinVals) {
 			//strip away the suffix
 			if (time.contains("hr")) {
-				hoursLate = Integer.parseInt(time.replaceAll("[^0-9]", "")); //replace all nondigits to blanks.
+				hoursLate = Integer.parseInt(time.replaceAll("[^0-9]", "")); //replace all non-digits to blanks.
 			}
 			else {
 				minsLate = Integer.parseInt(time.replaceAll("[^0-9]", ""));

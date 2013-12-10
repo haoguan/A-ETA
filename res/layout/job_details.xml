@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/etaBeige"
+    android:orientation="vertical"
+    android:weightSum="10" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:background="@color/etaBlue"
+        android:orientation="horizontal"
+        android:weightSum="10" >
+
+        <Button
+            android:id="@+id/b_check_job_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_weight="3"
+            android:background="@drawable/cancel_button"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_check_job"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:text="Add Job"
+            android:textColor="@color/etaWhite"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/b_check_job_continue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_weight="3"
+            android:background="@drawable/continue_button"
+            android:gravity="center" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_margin="15dp"
+        android:layout_weight="8.5"
+        android:background="@color/etaBeige" >
+
+        <ImageView
+            android:id="@+id/iv_check_job_time"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/clock_icon" />
+
+        <LinearLayout
+            android:id="@+id/ll_check_job_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_check_job_time"
+            android:layout_alignTop="@+id/iv_check_job_time"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/iv_check_job_time"
+            android:orientation="horizontal"
+            android:weightSum="10" >
+
+            <TextView
+                android:id="@+id/tv_check_job_time_from"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="4.5"
+                android:background="@drawable/rounded_edit_text"
+                android:hint="From"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:text="11:15 AM" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="to" />
+
+            <TextView
+                android:id="@+id/tv_check_job_time_to"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="4.5"
+                android:background="@drawable/rounded_edit_text"
+                android:hint="To"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:text="01:15 PM" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_check_job_date"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/iv_check_job_time"
+            android:layout_marginBottom="10dp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_check_job_date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_check_job_date"
+            android:layout_alignTop="@+id/iv_check_job_date"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/iv_check_job_date"
+            android:background="@drawable/rounded_edit_text"
+            android:hint="Date"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:text="Sunday, 11/17/13" />
+
+        <ImageView
+            android:id="@+id/iv_check_job_phone"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/iv_check_job_date"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/phone_icon" />
+
+        <TextView
+            android:id="@+id/tv_check_job_phone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_check_job_phone"
+            android:layout_alignTop="@+id/iv_check_job_phone"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/iv_check_job_phone"
+            android:background="@color/etaDarkGrey"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:text="5105089476" />
+
+        <ImageView
+            android:id="@+id/iv_check_job_location"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/iv_check_job_phone"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/location" />
+
+        <TextView
+            android:id="@+id/tv_check_job_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_check_job_location"
+            android:layout_alignTop="@+id/iv_check_job_location"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/iv_check_job_location"
+            android:background="@color/etaDarkGrey"
+            android:paddingLeft="10dp" />
+
+        <fragment
+            android:id="@+id/map_check_job"
+            android:name="com.google.android.gms.maps.MapFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="150dp"
+            android:layout_alignLeft="@+id/tv_check_job_location"
+            android:layout_below="@+id/tv_check_job_location"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/etaBeige" />
+
+        <TextView
+            android:id="@+id/tv_check_job_map_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/map_check_job"
+            android:layout_below="@+id/map_check_job"
+            android:layout_marginRight="10dp"
+            android:background="@color/etaGrey"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingLeft="10dp"
+            android:scrollHorizontally="true"
+            android:text="2226 Durant Ave, Berkeley CA"
+            android:textColor="@color/etaBlack" />
+
+        <EditText
+            android:id="@+id/et_add_job_notes"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignLeft="@+id/iv_check_job_location"
+            android:layout_alignRight="@+id/tv_check_job_location"
+            android:layout_below="@+id/tv_check_job_map_location"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/rounded_edit_text"
+            android:gravity="top|left"
+            android:hint="Notes"
+            android:inputType="textMultiLine"
+            android:lines="8"
+            android:maxLines="10"
+            android:minLines="6"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp" />
+    </RelativeLayout>
+
+</LinearLayout>

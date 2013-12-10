@@ -48,6 +48,7 @@ public class LateApptCursorAdapter extends CursorAdapter {
         aptName.setText(cursor.getString(cursor.getColumnIndex(ApptColumns.NAME)));
         
         cbNotify.setOnCheckedChangeListener(new CheckBoxListener(cursor, cursor.getPosition()));
+        cbNotify.setChecked(true);
         
 //        LinearLayout llName = (LinearLayout) view.findViewById(R.id.ll_late_list_name);
 //        LinearLayout llTravel = (LinearLayout) view.findViewById(R.id.ll_list_travel);
