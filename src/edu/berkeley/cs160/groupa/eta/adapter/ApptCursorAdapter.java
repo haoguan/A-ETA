@@ -113,6 +113,7 @@ public class ApptCursorAdapter extends CursorAdapter {
 			i.putExtra("to", to);
 			i.putExtra("location", location);
 			i.putExtra("notes", notes);
+			i.putExtra("position", pos);
 			v.getContext().startActivity(i);
 		}
     	

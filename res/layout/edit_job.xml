@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="10"
+    android:background="@color/etaBeige" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.5"
+        android:background="@color/etaBlue"
+        android:orientation="horizontal"
+        android:weightSum="10" >
+
+        <Button
+            android:id="@+id/b_edit_job_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/cancel_button" />
+
+        <TextView
+            android:id="@+id/tv_edit_job"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:gravity="center"
+            android:textColor="@color/etaWhite"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:text="Edit Job" />
+
+        <Button
+            android:id="@+id/b_edit_job_continue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="25dp"
+            android:gravity="center"
+            android:background="@drawable/continue_button" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="8.5"
+        android:background="@color/etaBeige"
+        android:layout_margin="15dp" >
+
+        <ImageView
+            android:id="@+id/iv_edit_job_name"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/name_icon" />
+
+        <EditText
+            android:id="@+id/et_edit_job_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_edit_job_name"
+            android:layout_alignTop="@+id/iv_edit_job_name"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/iv_edit_job_name"
+            android:background="@drawable/rounded_edit_text"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:text="Howard Guan"
+            android:hint="Name" />
+
+        <ImageView
+            android:id="@+id/iv_edit_job_phone"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/iv_edit_job_name"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/phone_icon" />
+
+        <EditText
+            android:id="@+id/et_edit_job_phone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_edit_job_phone"
+            android:layout_alignTop="@+id/iv_edit_job_phone"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/iv_edit_job_phone"
+            android:background="@drawable/rounded_edit_text"
+            android:paddingLeft="10dp"
+            android:inputType="phone"
+            android:singleLine="true"
+            android:text="5105089476"
+            android:hint="Phone" />
+
+        <ImageView
+            android:id="@+id/iv_edit_job_date"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/iv_edit_job_phone"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/clock_icon" />
+
+        <EditText
+            android:id="@+id/et_edit_job_date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_edit_job_date"
+            android:layout_alignTop="@+id/iv_edit_job_date"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/iv_edit_job_date"
+            android:background="@drawable/rounded_edit_text"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:text="Sunday, 11/17/13"
+            android:hint="Date" />
+
+        <ImageView
+            android:id="@+id/iv_edit_job_time"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/iv_edit_job_date"
+            android:layout_marginBottom="10dp"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:id="@+id/ll_edit_job_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_edit_job_time"
+            android:layout_alignTop="@+id/iv_edit_job_time"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/iv_edit_job_time"
+            android:orientation="horizontal"
+            android:weightSum="10" >
+
+            <EditText
+                android:id="@+id/et_edit_job_time_from"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="4.5"
+                android:background="@drawable/rounded_edit_text"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:text="11:15 AM"
+            	android:hint="From" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="to" />
+
+            <EditText
+                android:id="@+id/et_edit_job_time_to"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="4.5"
+                android:background="@drawable/rounded_edit_text"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:text="01:15 PM"
+            	android:hint="To" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_edit_job_location"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/iv_edit_job_time"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/location" />
+
+        <EditText
+            android:id="@+id/et_edit_job_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_edit_job_location"
+            android:layout_alignTop="@+id/iv_edit_job_location"
+            android:layout_margin="10dp"
+            android:layout_toRightOf="@+id/iv_edit_job_location"
+            android:background="@drawable/rounded_edit_text"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:hint="Location" />
+
+        <EditText
+            android:id="@+id/et_edit_job_notes"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignLeft="@+id/iv_edit_job_location"
+            android:layout_alignRight="@+id/et_edit_job_location"
+            android:layout_below="@+id/iv_edit_job_location"
+            android:background="@drawable/rounded_edit_text"
+            android:layout_marginTop="15dp"
+            android:paddingLeft="10dp"
+		    android:inputType="textMultiLine"
+		    android:lines="8"
+		    android:minLines="6"
+		    android:gravity="top|left"
+		    android:maxLines="10"
+		    android:paddingTop="10dp"
+            android:hint="Notes" />
+    </RelativeLayout>
+
+</LinearLayout>
