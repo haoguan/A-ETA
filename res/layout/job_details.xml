@@ -32,25 +32,25 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="4"
+            android:layout_weight="5"
+            android:ellipsize="end"
             android:gravity="center"
+            android:maxLines="1"
             android:text="Jessica Tran"
             android:textColor="@color/etaWhite"
             android:textSize="25sp"
-            android:textStyle="bold"
-            android:ellipsize="end"
-            android:maxLines="1" />
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/b_check_job_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="25dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="25dp"
-            android:layout_weight="3"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="2"
             android:background="@drawable/edit_icon"
             android:gravity="center" />
     </LinearLayout>
@@ -80,12 +80,14 @@
             android:orientation="horizontal"
             android:weightSum="10" >
 
-            <TextView
-                android:id="@+id/tv_check_job_time_from"
+            <EditText
+                android:id="@+id/et_check_job_time_from"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="4.5"
                 android:background="@drawable/rounded_edit_text"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="11:15 AM"
@@ -99,12 +101,14 @@
                 android:gravity="center"
                 android:text="to" />
 
-            <TextView
-                android:id="@+id/tv_check_job_time_to"
+            <EditText
+                android:id="@+id/et_check_job_time_to"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="4.5"
                 android:background="@drawable/rounded_edit_text"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="01:15 PM"
@@ -119,8 +123,8 @@
             android:layout_marginBottom="10dp"
             android:visibility="invisible" />
 
-        <TextView
-            android:id="@+id/tv_check_job_date"
+        <EditText
+            android:id="@+id/et_check_job_date"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iv_check_job_date"
@@ -128,8 +132,10 @@
             android:layout_margin="10dp"
             android:layout_toRightOf="@+id/iv_check_job_date"
             android:background="@drawable/rounded_edit_text"
-            android:paddingLeft="10dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:gravity="left|center"
+            android:paddingLeft="10dp"
             android:singleLine="true"
             android:text="Sunday, 11/17/13"
             android:textSize="15sp" />
@@ -142,8 +148,8 @@
             android:layout_marginBottom="10dp"
             android:src="@drawable/phone_icon" />
 
-        <TextView
-            android:id="@+id/tv_check_job_phone"
+        <FrameLayout
+            android:id="@+id/fl_make_call"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iv_check_job_phone"
@@ -151,12 +157,27 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_toRightOf="@+id/iv_check_job_phone"
-            android:background="@color/etaGrey"
-            android:paddingLeft="10dp"
-            android:singleLine="true"
-            android:gravity="center|left"
-            android:textSize="15sp"
-            android:text="Call 5105089476"/>
+            android:background="@color/etaDarkGrey" >
+
+            <EditText
+                android:id="@+id/et_check_job_phone"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/etaDarkGrey"
+                android:editable="false"
+                android:gravity="center|left"
+                android:paddingLeft="10dp"
+                android:singleLine="true"
+                android:text="Call 5105089476"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/iv_edit_job_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="center|right"
+                android:src="@drawable/name_arrow" />
+        </FrameLayout>
 
         <ImageView
             android:id="@+id/iv_check_job_location"
@@ -165,68 +186,87 @@
             android:layout_below="@+id/iv_check_job_phone"
             android:layout_marginBottom="10dp"
             android:src="@drawable/location" />
-
-        <TextView
-            android:id="@+id/tv_check_job_location"
+        
+        <FrameLayout
+            android:id="@+id/fl_get_directions"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/iv_check_job_location"
             android:layout_alignTop="@+id/iv_check_job_location"
+            android:layout_toRightOf="@+id/iv_check_job_location"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_toRightOf="@+id/iv_check_job_location"
-            android:background="@color/etaGrey"
-            android:paddingLeft="10dp"
-            android:gravity="center|left"
-            android:textSize="15sp"
-            android:text="Get Directions" />
+            android:background="@color/etaDarkGrey">
+
+	        <EditText
+	            android:id="@+id/et_check_job_location"
+	            android:layout_width="fill_parent"
+	            android:layout_height="fill_parent"
+	            android:gravity="center|left"
+	            android:paddingLeft="10dp"
+	            android:text="Get Directions"
+	            android:background="@color/etaDarkGrey"
+	            android:textSize="15sp"
+	            android:focusable="false"
+	            android:focusableInTouchMode="false" />
+	        
+	        <ImageView
+                android:id="@+id/iv_edit_job_directions"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="center|right"
+                android:src="@drawable/directions_icon" />
+        
+        </FrameLayout>
 
         <fragment
             android:id="@+id/map_check_job"
             android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="fill_parent"
             android:layout_height="150dp"
-            android:layout_alignLeft="@+id/tv_check_job_location"
-            android:layout_below="@+id/tv_check_job_location"
+            android:layout_alignLeft="@+id/fl_get_directions"
+            android:layout_below="@+id/fl_get_directions"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:background="@color/etaBeige" />
 
-        <TextView
-            android:id="@+id/tv_check_job_map_location"
+        <EditText
+            android:id="@+id/et_check_job_map_location"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/map_check_job"
             android:layout_below="@+id/map_check_job"
             android:layout_marginRight="10dp"
             android:background="@color/etaGrey"
-            android:ellipsize="end"
-            android:maxLines="1"
+            android:gravity="center|left"
+            android:padding="5dp"
             android:paddingLeft="10dp"
-            android:scrollHorizontally="true"
+            android:singleLine="true"
             android:text="2226 Durant Ave, Berkeley CA"
             android:textColor="@color/etaBlack"
             android:textSize="15sp"
-            android:gravity="center|left"
-            android:padding="5dp" />
+            android:focusable="false"
+            android:focusableInTouchMode="false" />
 
-        <TextView
-            android:id="@+id/tv_check_job_notes"
+        <EditText
+            android:id="@+id/et_check_job_notes"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_alignLeft="@+id/iv_check_job_location"
-            android:layout_alignRight="@+id/tv_check_job_location"
-            android:layout_below="@+id/tv_check_job_map_location"
+            android:layout_alignRight="@+id/fl_get_directions"
+            android:layout_below="@+id/et_check_job_map_location"
             android:layout_marginTop="15dp"
             android:background="@drawable/rounded_edit_text"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:gravity="top|left"
-            android:text="Notes"
             android:inputType="textMultiLine"
             android:lines="8"
             android:maxLines="10"
             android:minLines="6"
             android:paddingLeft="10dp"
-            android:paddingTop="10dp" />
+            android:paddingTop="10dp"
+            android:text="Notes" />
     </RelativeLayout>
 
 </LinearLayout>

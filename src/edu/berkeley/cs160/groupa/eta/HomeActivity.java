@@ -233,6 +233,15 @@ public class HomeActivity extends Activity implements LoaderManager.LoaderCallba
 		values.put(ApptColumns.AM_PM, "PM");
 		values.put(ApptColumns.TWELVE, "B");
 		getContentResolver().insert(ApptContentProvider.CONTENT_URI, values);
+		values.put(ApptColumns.NAME, "Eric Paulos");
+		values.put(ApptColumns.PHONE, "415-699-7558");
+		values.put(ApptColumns.DATE, "Wednesday, 12/11/13");
+		values.put(ApptColumns.FROM, "10:15 AM");
+		values.put(ApptColumns.TO, "11:14 AM");
+		values.put(ApptColumns.LOCATION, "345 Stockton Street, San Francisco, CA, United States");
+		values.put(ApptColumns.AM_PM, "AM");
+		values.put(ApptColumns.TWELVE, "B");
+		getContentResolver().insert(ApptContentProvider.CONTENT_URI, values);
 	}
 
 }

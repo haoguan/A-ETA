@@ -38,7 +38,6 @@ public class LateApptCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
     	
-		cbNotify = (CheckBox) view.findViewById(R.id.cb_notify);
     	//set start time
         TextView aptStartTime = (TextView)view.findViewById(R.id.tv_late_list_time);
         aptStartTime.setText(cursor.getString(cursor.getColumnIndex(ApptColumns.FROM)));
@@ -46,9 +45,6 @@ public class LateApptCursorAdapter extends CursorAdapter {
         //set apt name
         TextView aptName = (TextView)view.findViewById(R.id.tv_late_appt_list_name);
         aptName.setText(cursor.getString(cursor.getColumnIndex(ApptColumns.NAME)));
-        
-        cbNotify.setOnCheckedChangeListener(new CheckBoxListener(cursor, cursor.getPosition()));
-        cbNotify.setChecked(true);
         
 //        LinearLayout llName = (LinearLayout) view.findViewById(R.id.ll_late_list_name);
 //        LinearLayout llTravel = (LinearLayout) view.findViewById(R.id.ll_list_travel);
@@ -78,35 +74,46 @@ public class LateApptCursorAdapter extends CursorAdapter {
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View v = mInflater.inflate(R.layout.late_appt_list_item, parent, false);
         // edit: no need to call bindView here. That's done automatically
+		cbNotify = (CheckBox) v.findViewById(R.id.cb_notify);
+		Appointment appt = new Appointment();
+		appt.setName(cursor.getString(cursor.getColumnIndex(ApptColumns.NAME)));
+		appt.setPhone(cursor.getString(cursor.getColumnIndex(ApptColumns.PHONE)));
+        cbNotify.setOnCheckedChangeListener(new CheckBoxListener(appt)); //HOLY SHIT. LISTENERS NEED TO BE CREATED IN NEW VIEW, NOT BIND VIEW LOL.
+        cbNotify.setChecked(true);
         return v;
     }
     
     public class CheckBoxListener implements OnCheckedChangeListener {
     	
-    	Cursor c;
-    	int pos;
+//    	Cursor c;
+//    	int pos;
     	Appointment appt;
     	
-    	public CheckBoxListener(Cursor c, int pos) {
-    		this.c = c;
-    		this.pos = pos;
-    		appt = new Appointment();
+    	public CheckBoxListener(Appointment appt) {
+//    		this.c = c;
+//    		this.pos = pos;
+    		this.appt = appt;
     	}
     	
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 			if (isChecked) {
 				//add appt to list to text.
-				c.moveToPosition(pos);
-				String name = c.getString(c.getColumnIndex(ApptColumns.NAME));
-				String phone = c.getString(c.getColumnIndex(ApptColumns.PHONE));
-				appt.setName(name);
-				appt.setPhone(phone);
+//				c.moveToPosition(pos);
+//				String name = c.getString(c.getColumnIndex(ApptColumns.NAME));
+//				String phone = c.getString(c.getColumnIndex(ApptColumns.PHONE));
+//				appt.setName(name);
+//				appt.setPhone(phone);
+//				System.out.println("APPT 1: " + appt.getName() + ", " + appt.getPhone());
 				apptsToText.add(appt);
+				System.out.println("1.SIZE OF LIST: " + apptsToText.size());
 			}
 			else {
 				//remove appt from list to text.
+//				apptsToText.add(appt);
+//				System.out.println("2.SIZE OF LIST: " + apptsToText.size());
 				apptsToText.remove(appt);
+				System.out.println("2.SIZE OF LIST: " + apptsToText.size());
 			}
 		}
     	

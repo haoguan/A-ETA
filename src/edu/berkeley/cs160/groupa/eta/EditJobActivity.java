@@ -83,6 +83,15 @@ public class EditJobActivity extends Activity implements DatePickerDialog.OnDate
 		etTimeTo = (EditText) findViewById(R.id.et_edit_job_time_to);
 		etLocation = (EditText) findViewById(R.id.et_edit_job_location);
 		etNotes = (EditText) findViewById(R.id.et_edit_job_notes);
+		
+		//set fields from cursor
+		etName.setText(name);
+		etPhone.setText(phone);
+		etTimeFrom.setText(timeFrom);
+		etTimeTo.setText(timeTo);
+		etDate.setText(date);
+		etLocation.setText(location);
+		etNotes.setText(notes);
 
 		bCancel.setOnClickListener(new OnClickListener() {
 
@@ -143,6 +152,16 @@ public class EditJobActivity extends Activity implements DatePickerDialog.OnDate
 					}
 				}
 				
+				//need to delete old appt entry before adding in edited one.
+				String select = "((" + ApptColumns.NAME + " NOTNULL) AND (" + ApptColumns.PHONE + " NOTNULL) AND (" + ApptColumns.DATE + " != '' ) AND (" + ApptColumns.FROM + " != '' ) AND ("
+						+ ApptColumns.TO + " != '' ) AND (" + ApptColumns.LOCATION + " != '' ) AND (" + ApptColumns.AM_PM + " != '' ) AND (" + ApptColumns.TWELVE + " != '' ))";
+				String orderBy = ApptColumns.AM_PM + ", " + ApptColumns.TWELVE + ", " + ApptColumns.FROM;
+				Cursor query = getContentResolver().query(ApptContentProvider.CONTENT_URI, ApptContentProvider.APPTS_PROJECTION, select, null, orderBy);
+				query.moveToPosition(cursorPos); //delete only that entry
+				//get id
+				String id = query.getString(query.getColumnIndex(ApptColumns._ID));
+				getContentResolver().delete(ApptContentProvider.CONTENT_URI, "_ID = ?", new String[]{id});
+				
 				//there is conflict, display dialog.
 				AppointmentList conflicts = getApptConflicts(from, to);
 				if (conflicts.size() > 0) {
@@ -156,16 +175,6 @@ public class EditJobActivity extends Activity implements DatePickerDialog.OnDate
 					conflictsFragment.show(getFragmentManager(), "conflicts");
 					return;
 				}
-				
-				//need to delete old appt entry before adding in edited one.
-				String select = "((" + ApptColumns.NAME + " NOTNULL) AND (" + ApptColumns.PHONE + " NOTNULL) AND (" + ApptColumns.DATE + " != '' ) AND (" + ApptColumns.FROM + " != '' ) AND ("
-						+ ApptColumns.TO + " != '' ) AND (" + ApptColumns.LOCATION + " != '' ) AND (" + ApptColumns.AM_PM + " != '' ) AND (" + ApptColumns.TWELVE + " != '' ))";
-				String orderBy = ApptColumns.AM_PM + ", " + ApptColumns.TWELVE + ", " + ApptColumns.FROM;
-				Cursor query = getContentResolver().query(ApptContentProvider.CONTENT_URI, ApptContentProvider.APPTS_PROJECTION, select, null, orderBy);
-				query.moveToPosition(cursorPos); //delete only that entry
-				//get id
-				String id = query.getString(query.getColumnIndex(ApptColumns._ID));
-				getContentResolver().delete(ApptContentProvider.CONTENT_URI, "_ID = ?", new String[]{id});
 				getContentResolver().insert(ApptContentProvider.CONTENT_URI, values);
 				finish();
 			}
@@ -179,6 +188,9 @@ public class EditJobActivity extends Activity implements DatePickerDialog.OnDate
 				// TODO Auto-generated method stub
 				if (hasFocus) {
 					DialogFragment newFragment = new DatePickerFragment();
+					Bundle args = new Bundle();
+					args.putString("type", "editJob");
+					newFragment.setArguments(args);
 					newFragment.show(getFragmentManager(), "datePicker");
 					v.clearFocus();
 				}
@@ -192,6 +204,9 @@ public class EditJobActivity extends Activity implements DatePickerDialog.OnDate
 				if (hasFocus) {
 					setFromTime = true;
 					DialogFragment newFragment = new TimePickerFragment();
+					Bundle args = new Bundle();
+					args.putString("type", "editJob");
+					newFragment.setArguments(args);
 					newFragment.show(getFragmentManager(), "fromTimePicker");
 					v.clearFocus();
 				}
@@ -206,6 +221,9 @@ public class EditJobActivity extends Activity implements DatePickerDialog.OnDate
 				if (hasFocus) {
 					setFromTime = false;
 					DialogFragment newFragment = new TimePickerFragment();
+					Bundle args = new Bundle();
+					args.putString("type", "editJob");
+					newFragment.setArguments(args);
 					newFragment.show(getFragmentManager(), "fromTimePicker");
 					v.clearFocus();
 				}

@@ -36,11 +36,6 @@ public class ApptCursorAdapter extends CursorAdapter {
         TextView aptName = (TextView)view.findViewById(R.id.tv_appt_list_name);
         aptName.setText(cursor.getString(cursor.getColumnIndex(ApptColumns.NAME)));
         
-        LinearLayout llName = (LinearLayout) view.findViewById(R.id.ll_list_name);
-        LinearLayout llTravel = (LinearLayout) view.findViewById(R.id.ll_list_travel);
-        llName.setOnClickListener(new NameOnClickListener(cursor, cursor.getPosition()));
-        
-		llTravel.setOnClickListener(new TravelOnClickListener(cursor, cursor.getPosition()));
 
 //        int position = cursor.getPosition(); // that should be the same position
 //        if (mSelectedPosition == position) {
@@ -53,8 +48,21 @@ public class ApptCursorAdapter extends CursorAdapter {
     }
 
     @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+    public View newView(Context context, Cursor c, ViewGroup parent) {
         View v = mInflater.inflate(R.layout.home_appt_list_item, parent, false);
+        LinearLayout llName = (LinearLayout) v.findViewById(R.id.ll_list_name);
+        LinearLayout llTravel = (LinearLayout) v.findViewById(R.id.ll_list_travel);
+        
+        String name = c.getString(c.getColumnIndex(ApptColumns.NAME));
+		String phone = c.getString(c.getColumnIndex(ApptColumns.PHONE));
+		String date = c.getString(c.getColumnIndex(ApptColumns.DATE));
+		String from = c.getString(c.getColumnIndex(ApptColumns.FROM));
+		String to = c.getString(c.getColumnIndex(ApptColumns.TO));
+		String location = c.getString(c.getColumnIndex(ApptColumns.LOCATION));
+		String notes = c.getString(c.getColumnIndex(ApptColumns.NOTES));
+		int position = c.getPosition();
+        llName.setOnClickListener(new NameOnClickListener(name, phone, date, from, to, location, notes, position));
+		llTravel.setOnClickListener(new TravelOnClickListener(location));
         // edit: no need to call bindView here. That's done automatically
         return v;
     }
@@ -63,19 +71,15 @@ public class ApptCursorAdapter extends CursorAdapter {
     //custom onclicklistener that handles cursor
     public class TravelOnClickListener implements OnClickListener {
     	
-    	Cursor c;
-    	int pos;
+    	String location;
     	
-    	public TravelOnClickListener(Cursor c, int pos) {
-    		this.c = c;
-    		this.pos = pos;
+    	public TravelOnClickListener(String location) {
+    		this.location = location;
     	}
 
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			c.moveToPosition(pos);
-			String location = c.getString(c.getColumnIndex(ApptColumns.LOCATION));
 			Intent i = new Intent(v.getContext(), DirectionsActivity.class);
 			i.putExtra("location", location);
 			v.getContext().startActivity(i);
@@ -86,25 +90,37 @@ public class ApptCursorAdapter extends CursorAdapter {
     //custom onclicklistener that handles cursor
     public class NameOnClickListener implements OnClickListener {
     	
-    	Cursor c;
-    	int pos;
+    	String name;
+    	String phone;
+    	String date;
+    	String from;
+    	String to;
+    	String location;
+    	String notes;
+    	int position;
     	
-    	public NameOnClickListener(Cursor c, int pos) {
-    		this.c = c;
-    		this.pos = pos;
+    	public NameOnClickListener(String name, String phone, String date, String from, String to, String location, String notes, int position) {
+    		this.name = name;
+    		this.phone = phone;
+    		this.date = date;
+    		this.from = from;
+    		this.to = to;
+    		this.location = location;
+    		this.notes = notes;
+    		this.position = position;
     	}
 
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			c.moveToPosition(pos);
-			String name = c.getString(c.getColumnIndex(ApptColumns.NAME));
-			String phone = c.getString(c.getColumnIndex(ApptColumns.PHONE));
-			String date = c.getString(c.getColumnIndex(ApptColumns.DATE));
-			String from = c.getString(c.getColumnIndex(ApptColumns.FROM));
-			String to = c.getString(c.getColumnIndex(ApptColumns.TO));
-			String location = c.getString(c.getColumnIndex(ApptColumns.LOCATION));
-			String notes = c.getString(c.getColumnIndex(ApptColumns.NOTES));
+//			c.moveToPosition(pos);
+//			String name = c.getString(c.getColumnIndex(ApptColumns.NAME));
+//			String phone = c.getString(c.getColumnIndex(ApptColumns.PHONE));
+//			String date = c.getString(c.getColumnIndex(ApptColumns.DATE));
+//			String from = c.getString(c.getColumnIndex(ApptColumns.FROM));
+//			String to = c.getString(c.getColumnIndex(ApptColumns.TO));
+//			String location = c.getString(c.getColumnIndex(ApptColumns.LOCATION));
+//			String notes = c.getString(c.getColumnIndex(ApptColumns.NOTES));
 			Intent i = new Intent(v.getContext(), JobDetailsActivity.class);
 			i.putExtra("name", name);
 			i.putExtra("phone", phone);
@@ -113,7 +129,7 @@ public class ApptCursorAdapter extends CursorAdapter {
 			i.putExtra("to", to);
 			i.putExtra("location", location);
 			i.putExtra("notes", notes);
-			i.putExtra("position", pos);
+			i.putExtra("position", position);
 			v.getContext().startActivity(i);
 		}
     	

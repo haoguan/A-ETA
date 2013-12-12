@@ -153,6 +153,9 @@ public class AddJobActivity extends Activity implements DatePickerDialog.OnDateS
 				// TODO Auto-generated method stub
 				if (hasFocus) {
 					DialogFragment newFragment = new DatePickerFragment();
+					Bundle args = new Bundle();
+					args.putString("type", "addJob");
+					newFragment.setArguments(args);
 					newFragment.show(getFragmentManager(), "datePicker");
 					v.clearFocus();
 				}
@@ -166,6 +169,9 @@ public class AddJobActivity extends Activity implements DatePickerDialog.OnDateS
 				if (hasFocus) {
 					setFromTime = true;
 					DialogFragment newFragment = new TimePickerFragment();
+					Bundle args = new Bundle();
+					args.putString("type", "addJob");
+					newFragment.setArguments(args);
 					newFragment.show(getFragmentManager(), "fromTimePicker");
 					v.clearFocus();
 				}
@@ -180,6 +186,9 @@ public class AddJobActivity extends Activity implements DatePickerDialog.OnDateS
 				if (hasFocus) {
 					setFromTime = false;
 					DialogFragment newFragment = new TimePickerFragment();
+					Bundle args = new Bundle();
+					args.putString("type", "addJob");
+					newFragment.setArguments(args);
 					newFragment.show(getFragmentManager(), "fromTimePicker");
 					v.clearFocus();
 				}

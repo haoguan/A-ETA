@@ -132,6 +132,7 @@ public class RunningLateActivity extends Activity implements
 		    @Override
 		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 		        // your code here
+		    	System.out.println("SPIN SELECTED!");
 		    	updatePreviewTable();
 		    }
 
@@ -225,6 +226,20 @@ public class RunningLateActivity extends Activity implements
 			ContentValues newTimes = new ContentValues();
 			newTimes.put(ApptColumns.FROM, ltFrom.toString(pattern));
 			newTimes.put(ApptColumns.TO, ltTo.toString(pattern));
+			//update TWELVE and AM/PM fields!
+			if (ltFrom.toString(pattern).matches("^(12:[0-5][0-9] [A|P][M]$)")) {
+				newTimes.put(ApptColumns.TWELVE, "A");
+			}
+			else {
+				newTimes.put(ApptColumns.TWELVE, "B");
+			}
+			
+			if (ltFrom.toString(pattern).contains("AM")) {
+				newTimes.put(ApptColumns.AM_PM, "AM");
+			}
+			else {
+				newTimes.put(ApptColumns.AM_PM, "PM");
+			}
 			getContentResolver().update(ApptContentProvider.COPY_CONTENT_URI, newTimes, "_ID = ?", new String[]{id});
 		}
 		updateCursor.close();
