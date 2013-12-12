@@ -67,6 +67,7 @@ public class JobDetailsActivity extends Activity {
 	EditText etTimeFrom;
 	EditText etTimeTo;
 	EditText etDate;
+	EditText etGetDirections;
 	EditText etLocation;
 	EditText etNotes;
 	
@@ -128,6 +129,7 @@ public class JobDetailsActivity extends Activity {
 		etTimeTo = (EditText) findViewById(R.id.et_check_job_time_to);
 		etDate = (EditText) findViewById(R.id.et_check_job_date);
 		etLocation = (EditText) findViewById(R.id.et_check_job_map_location);
+		etGetDirections = (EditText) findViewById(R.id.et_check_job_location);
 		etNotes = (EditText) findViewById(R.id.et_check_job_notes);
 		bCancel = (Button) findViewById(R.id.b_check_job_cancel);
 		bEdit = (Button) findViewById(R.id.b_check_job_edit);
@@ -168,7 +170,7 @@ public class JobDetailsActivity extends Activity {
 			}
 		});
 		
-		flMakeCall.setOnClickListener(new OnClickListener() {
+		etPhone.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -179,14 +181,14 @@ public class JobDetailsActivity extends Activity {
 			}
 		});
 		
-		etPhone.setOnClickListener(new OnClickListener() {
+		etGetDirections.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(Intent.ACTION_CALL);
-				intent.setData(Uri.parse("tel:" + phone));
-				startActivity(intent);
+				Intent i = new Intent(v.getContext(), DirectionsActivity.class);
+				i.putExtra("location", location);
+				v.getContext().startActivity(i);
 			}
 		});
 	}
