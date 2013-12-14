@@ -102,7 +102,7 @@ public class RunningLateActivity extends Activity implements
 					String phone = appt.getPhone();
 					// create message and text that number.
 					String message = "Hello " + name
-							+ "! Sorry, but I will be late by " + lateBy + ". \n\n -ETA";
+							+ "! Sorry, but I will be late by " + lateBy + ".\n\n -ETA";
 					try {
 						SmsManager smsManager = SmsManager.getDefault();
 						smsManager.sendTextMessage(phone, null, message, null, null);
